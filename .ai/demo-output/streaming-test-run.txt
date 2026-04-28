@@ -1,0 +1,27 @@
+Command: box test:stream
+
+[stream] discovering tests from /tests/specs
+[stream] bundle: tests.specs.unit.SessionDecisionServiceSpec
+[stream] suite: SessionDecisionService
+[stream] starting: accepts a submitted session when the average equals the acceptance threshold
+[fail] expected status to be accepted, but received waitlisted
+
+Diagnosis:
+The spec is right. A score equal to the acceptance threshold should qualify.
+The implementation used `>` instead of `>=`.
+
+Fix:
+app/models/SessionDecisionService.bx
+- if ( averageScore > variables.acceptanceThreshold )
++ if ( averageScore >= variables.acceptanceThreshold )
+
+[stream] rerun: tests.specs.unit.SessionDecisionServiceSpec
+[pass] accepts a submitted session when the average equals the acceptance threshold
+[pass] waitlists a submitted session when the average equals the waitlist threshold
+[pass] ignores incomplete and conflicted reviews when calculating the final decision
+
+Final:
+10 specs
+10 passed
+0 failed
+0 errors

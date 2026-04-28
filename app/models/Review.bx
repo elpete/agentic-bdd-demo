@@ -1,0 +1,53 @@
+class accessors="true" {
+
+	property name="reviewer";
+	property name="scoreCard";
+	property name="conflict";
+	property name="submitted";
+	property name="notes";
+
+	function init(
+		string reviewer = "",
+		any scoreCard = "",
+		boolean conflict = false,
+		boolean submitted = false,
+		string notes = ""
+	){
+		variables.reviewer  = arguments.reviewer;
+		variables.scoreCard = isObject( arguments.scoreCard ) ? arguments.scoreCard : new app.models.ScoreCard();
+		variables.conflict  = arguments.conflict;
+		variables.submitted = arguments.submitted;
+		variables.notes     = arguments.notes;
+
+		return this;
+	}
+
+	boolean function isComplete(){
+		return variables.submitted
+			&& len( trim( variables.reviewer ) )
+			&& variables.scoreCard.isComplete();
+	}
+
+	boolean function canAffectDecision(){
+		return isComplete() && !variables.conflict;
+	}
+
+	numeric function averageScore(){
+		if ( !canAffectDecision() ) {
+			return 0;
+		}
+
+		return variables.scoreCard.average();
+	}
+
+	struct function toStruct(){
+		return {
+			"reviewer"  : variables.reviewer,
+			"scoreCard" : variables.scoreCard.toStruct(),
+			"conflict"  : variables.conflict,
+			"submitted" : variables.submitted,
+			"notes"     : variables.notes
+		};
+	}
+
+}

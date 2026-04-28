@@ -1,0 +1,50 @@
+class accessors="true" {
+
+	property name="clarity";
+	property name="relevance";
+	property name="originality";
+	property name="confidence";
+
+	function init(
+		numeric clarity = 0,
+		numeric relevance = 0,
+		numeric originality = 0,
+		numeric confidence = 0
+	){
+		variables.clarity     = arguments.clarity;
+		variables.relevance   = arguments.relevance;
+		variables.originality = arguments.originality;
+		variables.confidence  = arguments.confidence;
+
+		return this;
+	}
+
+	boolean function isComplete(){
+		return isValidScore( variables.clarity )
+			&& isValidScore( variables.relevance )
+			&& isValidScore( variables.originality )
+			&& isValidScore( variables.confidence );
+	}
+
+	numeric function average(){
+		if ( !isComplete() ) {
+			return 0;
+		}
+
+		return ( variables.clarity + variables.relevance + variables.originality + variables.confidence ) / 4;
+	}
+
+	struct function toStruct(){
+		return {
+			"clarity"     : variables.clarity,
+			"relevance"   : variables.relevance,
+			"originality" : variables.originality,
+			"confidence"  : variables.confidence
+		};
+	}
+
+	private boolean function isValidScore( required numeric value ){
+		return arguments.value >= 1 && arguments.value <= 5;
+	}
+
+}

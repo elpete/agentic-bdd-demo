@@ -1,0 +1,6 @@
+.DS_Store
+.env
+runtime/logs/
+tests/results/
+test-results-*.html
+.CommandBox/

@@ -1,0 +1,47 @@
+{
+    "name":"agentic-bdd-demo",
+    "version":"1.0.0",
+    "author":"Eric Peterson",
+    "location":"forgeboxStorage",
+    "slug":"agentic-bdd-demo",
+    "createPackageDirectory":false,
+    "type":"mvc",
+    "language":"boxlang",
+    "keywords":"boxlang",
+    "shortDescription":"A reliable offline demo repo for an Into the Box 2026 Agentic BDD/TDD session.",
+    "ignore":[],
+    "dependencies":{
+        "coldbox":"^8.0.0"
+    },
+    "devDependencies":{
+        "testbox":"*",
+        "route-visualizer":"*",
+        "commandbox-boxlang":"*",
+        "commandbox-cfformat":"*"
+    },
+    "installPathConventions":{
+        "modules":"lib/modules"
+    },
+    "installPaths":{
+        "coldbox":"lib/coldbox/",
+        "testbox":"lib/testbox/",
+        "route-visualizer":"lib/modules/route-visualizer/"
+    },
+    "scripts":{
+        "format":"cfformat run app/,tests/specs/,*.bx --overwrite --verbose",
+        "format:check":"cfformat check app/,tests/specs/,*.bx ./.cfformat.json --verbose",
+        "format:watch":"cfformat watch path='app/,tests/specs/,*.bx' settingsPath='.cfformat.json'",
+        "docker:build":"!docker build --no-cache -t my-coldbox-app -f ./docker/Dockerfile ./",
+        "docker:run":"!docker run -it -p 8080:8080 my-coldbox-app",
+        "docker:bash":"!docker run -it my-coldbox-app /bin/bash",
+        "docker:stack":"!docker compose -f docker/docker-compose.yaml ${1}",
+        "test:dry":"!curl -s 'http://127.0.0.1:42518/tests/runner.bxm?dryRun=true&reporter=json&directory=tests.specs&recurse=true'",
+        "test:unit":"testbox run directory=tests.specs.unit outputFormats=mintext",
+        "test:target":"testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormats=mintext",
+        "test:stream":"testbox run --streaming"
+    },
+    "testbox":{
+        "runner":"/tests/runner.bxm"
+    },
+    "description":"Conference Session Review / CFP Scoring demo for showing how BDD and framework-aware agent guidance make AI-generated tests safer."
+}

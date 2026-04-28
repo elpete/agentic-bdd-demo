@@ -1,0 +1,27 @@
+class accessors="true" {
+
+	property name="name";
+	property name="email";
+	property name="bio";
+
+	function init( string name = "", string email = "", string bio = "" ){
+		variables.name  = arguments.name;
+		variables.email = arguments.email;
+		variables.bio   = arguments.bio;
+
+		return this;
+	}
+
+	boolean function isComplete(){
+		return len( trim( variables.name ) ) && len( trim( variables.email ) );
+	}
+
+	struct function toStruct(){
+		return {
+			"name"  : variables.name,
+			"email" : variables.email,
+			"bio"   : variables.bio
+		};
+	}
+
+}

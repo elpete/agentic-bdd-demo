@@ -1,0 +1,28 @@
+{
+    "name":"agentic-bdd-demo",
+    "app":{
+        "cfengine":"boxlang@1",
+        "engineConfigFile":"./runtime/boxlang.json"
+    },
+    "jvm":{
+        "heapSize":"512",
+        "javaVersion":"openjdk21_jre"
+    },
+    "web":{
+        "webroot":"public",
+        "host":"127.0.0.1",
+        "http":{
+            "port":42518
+        },
+        "rewrites":{
+            "enable":true
+        },
+        "aliases":{
+            "/coldbox/system/exceptions":"./lib/coldbox/system/exceptions/",
+            "/tests":"./tests/"
+        }
+    },
+    "scripts":{
+        "onServerInitialInstall":"install bx-esapi"
+    }
+}

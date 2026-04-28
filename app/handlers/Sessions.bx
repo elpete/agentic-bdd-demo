@@ -1,0 +1,57 @@
+class extends="coldbox.system.EventHandler" {
+
+	function index( event, rc, prc ){
+		var proposal = sampleSession();
+		var decision = new app.models.SessionDecisionService().decide( proposal );
+
+		prc.proposal = proposal.toStruct();
+		prc.decision = decision;
+		event.setView( "sessions/index" );
+	}
+
+	function decision( event, rc, prc ){
+		return new app.models.SessionDecisionService().decide( sampleSession() );
+	}
+
+	private any function sampleSession(){
+		var speaker = new app.models.Speaker(
+			name = "Sam Rivera",
+			email = "sam@example.test",
+			bio = "Builder of practical testing workflows."
+		);
+
+		var proposal = new app.models.Session(
+			title = "BDD Keeps Agents Honest",
+			abstract = "A practical look at using executable behavior to steer AI-generated code.",
+			speaker = speaker,
+			category = "Testing"
+		).submit();
+
+		proposal
+			.addReview( reviewWithScores( "alex", 4, 4, 4, 4 ) )
+			.addReview( reviewWithScores( "blair", 5, 4, 4, 3 ) )
+			.addReview( reviewWithScores( "casey", 4, 4, 5, 4 ) );
+
+		return proposal;
+	}
+
+	private any function reviewWithScores(
+		required string reviewer,
+		required numeric clarity,
+		required numeric relevance,
+		required numeric originality,
+		required numeric confidence
+	){
+		return new app.models.Review(
+			reviewer = arguments.reviewer,
+			submitted = true,
+			scoreCard = new app.models.ScoreCard(
+				clarity = arguments.clarity,
+				relevance = arguments.relevance,
+				originality = arguments.originality,
+				confidence = arguments.confidence
+			)
+		);
+	}
+
+}

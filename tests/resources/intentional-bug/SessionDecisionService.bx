@@ -1,0 +1,63 @@
+class accessors="true" {
+
+	property name="minimumReviewCount";
+	property name="acceptanceThreshold";
+	property name="waitlistThreshold";
+
+	function init(
+		numeric minimumReviewCount = 3,
+		numeric acceptanceThreshold = 4,
+		numeric waitlistThreshold = 3
+	){
+		variables.minimumReviewCount = arguments.minimumReviewCount;
+		variables.acceptanceThreshold = arguments.acceptanceThreshold;
+		variables.waitlistThreshold = arguments.waitlistThreshold;
+
+		return this;
+	}
+
+	struct function decide( required any proposal ){
+		if ( arguments.proposal.isDraft() ) {
+			return decision( "draft", "Session has not been submitted.", 0, 0 );
+		}
+
+		var eligibleReviews = arguments.proposal.decisionEligibleReviews();
+		var eligibleCount   = arrayLen( eligibleReviews );
+		var averageScore    = arguments.proposal.averageScore();
+
+		if ( eligibleCount < variables.minimumReviewCount ) {
+			return decision(
+				"waitlisted",
+				"Not enough completed, non-conflicting reviews for a final decision.",
+				averageScore,
+				eligibleCount
+			);
+		}
+
+		// Intentional demo bug: threshold equality should count.
+		if ( averageScore > variables.acceptanceThreshold ) {
+			return decision( "accepted", "Average score meets the acceptance threshold.", averageScore, eligibleCount );
+		}
+
+		if ( averageScore > variables.waitlistThreshold ) {
+			return decision( "waitlisted", "Average score meets the waitlist threshold.", averageScore, eligibleCount );
+		}
+
+		return decision( "rejected", "Average score is below the waitlist threshold.", averageScore, eligibleCount );
+	}
+
+	private struct function decision(
+		required string status,
+		required string reason,
+		required numeric averageScore,
+		required numeric eligibleReviewCount
+	){
+		return {
+			"status"              : arguments.status,
+			"reason"              : arguments.reason,
+			"averageScore"        : arguments.averageScore,
+			"eligibleReviewCount" : arguments.eligibleReviewCount
+		};
+	}
+
+}

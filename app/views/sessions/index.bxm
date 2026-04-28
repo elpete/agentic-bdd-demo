@@ -1,0 +1,28 @@
+<bx:output>
+<main class="container py-5">
+	<h1 class="display-6 fw-bold">Agentic BDD/TDD Demo</h1>
+	<p class="lead">Conference session review and CFP scoring in ColdBox + BoxLang.</p>
+
+	<section class="my-4">
+		<h2 class="h4">Session</h2>
+		<dl>
+			<dt>Title</dt>
+			<dd>#encodeForHTML( prc.proposal.title )#</dd>
+			<dt>Category</dt>
+			<dd>#encodeForHTML( prc.proposal.category )#</dd>
+			<dt>Status</dt>
+			<dd>#encodeForHTML( prc.proposal.status )#</dd>
+		</dl>
+	</section>
+
+	<section class="my-4">
+		<h2 class="h4">Decision</h2>
+		<p>
+			<strong>#encodeForHTML( prc.decision.status )#</strong>
+			with #numberFormat( prc.decision.averageScore, "0.00" )# average from
+			#prc.decision.eligibleReviewCount# eligible reviews.
+		</p>
+		<p>#encodeForHTML( prc.decision.reason )#</p>
+	</section>
+</main>
+</bx:output>

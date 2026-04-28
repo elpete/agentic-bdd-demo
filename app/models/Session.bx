@@ -1,0 +1,93 @@
+class accessors="true" {
+
+	property name="title";
+	property name="abstract";
+	property name="speaker";
+	property name="category";
+	property name="status";
+	property name="reviews";
+
+	function init(
+		string title = "",
+		string abstract = "",
+		any speaker = "",
+		string category = ""
+	){
+		variables.title    = arguments.title;
+		variables.abstract = arguments.abstract;
+		variables.speaker  = isObject( arguments.speaker ) ? arguments.speaker : "";
+		variables.category = arguments.category;
+		variables.status   = "draft";
+		variables.reviews  = [];
+
+		return this;
+	}
+
+	boolean function isDraft(){
+		return variables.status == "draft";
+	}
+
+	boolean function canSubmit(){
+		return len( trim( variables.title ) )
+			&& len( trim( variables.abstract ) )
+			&& isObject( variables.speaker )
+			&& variables.speaker.isComplete()
+			&& len( trim( variables.category ) );
+	}
+
+	function submit(){
+		if ( !canSubmit() ) {
+			throw(
+				type    = "Session.InvalidSubmission",
+				message = "A submitted session requires title, abstract, speaker, and category."
+			);
+		}
+
+		variables.status = "submitted";
+		return this;
+	}
+
+	function addReview( required any review ){
+		arrayAppend( variables.reviews, arguments.review );
+		return this;
+	}
+
+	array function decisionEligibleReviews(){
+		var eligible = [];
+
+		for ( var review in variables.reviews ) {
+			if ( review.canAffectDecision() ) {
+				arrayAppend( eligible, review );
+			}
+		}
+
+		return eligible;
+	}
+
+	numeric function averageScore(){
+		var eligible = decisionEligibleReviews();
+
+		if ( !arrayLen( eligible ) ) {
+			return 0;
+		}
+
+		var total = 0;
+		for ( var review in eligible ) {
+			total += review.averageScore();
+		}
+
+		return total / arrayLen( eligible );
+	}
+
+	struct function toStruct(){
+		return {
+			"title"       : variables.title,
+			"abstract"    : variables.abstract,
+			"speaker"     : isObject( variables.speaker ) ? variables.speaker.toStruct() : {},
+			"category"    : variables.category,
+			"status"      : variables.status,
+			"reviewCount" : arrayLen( variables.reviews )
+		};
+	}
+
+}
