@@ -32,7 +32,7 @@ Use one command when you want to move through the fake prompt sequence without h
 box task run demo
 ```
 
-The menu is the state list. The current state is checked, and choosing a different state transitions the repo to that state. Use Ctrl-C to exit the picker.
+The menu is the state list. The current state is highlighted. Press `q` to quit. Choosing a later state walks forward through every intermediate state, types the saved prompt and response, pauses between sections, shows files changed, and exits. Choosing an earlier state applies that state, shows files changed, pauses once, and exits.
 
 Direct commands are still available if you want to jump without the menu:
 
@@ -49,10 +49,10 @@ box task run demo reset
 The task prints:
 
 - the selected state
-- changed files
+- the saved prompt as typed agent-style output when moving forward
+- the saved AI response as typed agent-style output when moving forward
+- changed files in a presentation-friendly summary
 - the next command to run
-- the saved prompt under `You paste`
-- the saved response under `Codex says`
 
 ## Beat 1: The Intern Writes Tests
 

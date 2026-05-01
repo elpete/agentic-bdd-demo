@@ -14,17 +14,13 @@ component {
 	}
 
 	function menu(){
-		while ( true ) {
-			printMenuHeader();
-			if ( !pick() ) {
-				print.greenLine( "Done." );
-				return;
-			}
-			if ( !pauseForMenu() ) {
-				print.greenLine( "Done." );
-				return;
-			}
+		printMenuHeader();
+		if ( !pick() ) {
+			print.greenLine( "Done." );
+			return;
 		}
+
+		print.greenLine( "Done." );
 	}
 
 	function list(){
@@ -37,27 +33,7 @@ component {
 	}
 
 	function apply( string state = "" ){
-		var selected = findState( normalizeStateID( arguments.state ) );
-
-		print.boldCyanLine( "Applying state #selected.id#: #selected.title#" );
-		print.line( selected.description );
-		print.line();
-
-		applyStateChanges( selected );
-		setCurrentState( selected.id );
-
-		print.line();
-		print.boldGreenLine( "Changed" );
-		for ( var changedFile in selected.changed ) {
-			print.line( "  - #changedFile#" );
-		}
-
-		print.line();
-		print.boldLine( "Suggested next command" );
-		print.line( "  #selected.command#" );
-
-		print.line();
-		printChat( selected );
+		transitionToState( normalizeStateID( arguments.state ) );
 	}
 
 	function pick(){
@@ -66,7 +42,7 @@ component {
 			return false;
 		}
 
-		apply( selectedState );
+		transitionToState( selectedState );
 		return true;
 	}
 
@@ -79,7 +55,7 @@ component {
 	}
 
 	function reset(){
-		apply( "06" );
+		transitionToState( "06" );
 	}
 
 	private function printMenuHeader(){
@@ -188,12 +164,6 @@ component {
 		print.toConsole();
 	}
 
-	private boolean function pauseForMenu(){
-		print.line();
-		var response = ask( message = 'Press Enter to return to the menu, or "q" to quit.' );
-		return !isQuitInput( response );
-	}
-
 	private boolean function isQuitInput( required string value ){
 		return listFindNoCase( "q,quit,exit", trim( arguments.value ) );
 	}
@@ -220,6 +190,126 @@ component {
 		return false;
 	}
 
+	private function transitionToState( required string targetState ){
+		if ( !hasState( arguments.targetState ) ) {
+			error( "Unknown demo state [#arguments.targetState#]. Run `box task run demo list` to see available states." );
+		}
+
+		var states = getStates();
+		var currentIndex = findStateIndex( getCurrentState() );
+		var targetIndex = findStateIndex( arguments.targetState );
+
+		if ( targetIndex > currentIndex ) {
+			for ( var i = currentIndex + 1; i <= targetIndex; i++ ) {
+				runForwardTransition( states[ i ] );
+			}
+			return;
+		}
+
+		runQuietTransition( states[ targetIndex ] );
+	}
+
+	private function runForwardTransition( required struct selected ){
+		printTransitionHeader( arguments.selected, "Forward transition" );
+		printTypedArtifact(
+			title = "Prompt",
+			filePath = arguments.selected.promptFile,
+			emptyMessage = "No prompt for this state."
+		);
+
+		waitForAnyKey( "Press any key to show the AI response..." );
+
+		printTypedArtifact(
+			title = "AI response",
+			filePath = arguments.selected.responseFile,
+			emptyMessage = "No saved AI response for this state."
+		);
+
+		applyStateChanges( arguments.selected );
+		setCurrentState( arguments.selected.id );
+		printChangedFiles( arguments.selected );
+		waitForAnyKey( "Press any key to continue..." );
+	}
+
+	private function runQuietTransition( required struct selected ){
+		printTransitionHeader( arguments.selected, "Backward transition" );
+		applyStateChanges( arguments.selected );
+		setCurrentState( arguments.selected.id );
+		printChangedFiles( arguments.selected );
+		waitForAnyKey( "Press any key to finish..." );
+	}
+
+	private function printTransitionHeader( required struct selected, required string label ){
+		print.line();
+		print.boldCyanLine( repeatString( "=", 72 ) );
+		print.boldCyanLine( "#arguments.label#: #arguments.selected.id# - #arguments.selected.title#" );
+		print.line( arguments.selected.description );
+		print.boldCyanLine( repeatString( "=", 72 ) );
+		print.line();
+	}
+
+	private function printTypedArtifact(
+		required string title,
+		required string filePath,
+		required string emptyMessage
+	){
+		print.boldLine( arguments.title );
+		print.line( repeatString( "-", 72 ) );
+
+		if ( len( arguments.filePath ) && fileExists( variables.root & arguments.filePath ) ) {
+			typeText( fileRead( variables.root & arguments.filePath ) );
+		} else {
+			typeText( arguments.emptyMessage );
+		}
+	}
+
+	private function typeText( required string text ){
+		var normalized = replace( arguments.text, chr( 13 ) & chr( 10 ), chr( 10 ), "all" );
+		normalized = replace( normalized, chr( 13 ), chr( 10 ), "all" );
+
+		print.toConsole();
+		for ( var i = 1; i <= len( normalized ); i++ ) {
+			shell.printString( mid( normalized, i, 1 ) );
+			if ( i % 8 == 0 ) {
+				sleep( 1 );
+			}
+		}
+		shell.printString( chr( 10 ) );
+	}
+
+	private function printChangedFiles( required struct selected ){
+		print.line();
+		print.boldGreenLine( "Files changed" );
+		print.line( repeatString( "-", 72 ) );
+		for ( var changedFile in arguments.selected.changed ) {
+			print.line( "  * #changedFile#" );
+		}
+
+		print.line();
+		print.boldLine( "Suggested next command" );
+		print.line( "  #arguments.selected.command#" );
+		print.toConsole();
+	}
+
+	private function waitForAnyKey( required string message ){
+		print.line();
+		print.line( arguments.message );
+		print.toConsole();
+		try {
+			waitForKey();
+		} catch ( any e ) {
+			if (
+				e.type.toString() == "UserInterruptException" ||
+				e.message == "UserInterruptException" ||
+				e.message == "CANCELLED"
+			) {
+				rethrow;
+			}
+			ask( message = "Press Enter to continue: " );
+		}
+		print.line();
+	}
+
 	private function applyRelativeState( required numeric offset ){
 		var states = getStates();
 		var current = getCurrentState();
@@ -240,7 +330,7 @@ component {
 			nextIndex = arrayLen( states );
 		}
 
-		apply( states[ nextIndex ].id );
+		transitionToState( states[ nextIndex ].id );
 	}
 
 	private function applyStateChanges( required struct selected ){
