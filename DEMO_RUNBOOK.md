@@ -169,8 +169,6 @@ Expected discovery shape:
 ```text
 tests.specs.unit.SessionDecisionServiceSpec
   3 specs
-tests.specs.integration.SessionsSpec
-  1 spec
 ```
 
 Talking point:
@@ -257,8 +255,7 @@ tests.specs.unit.SessionDecisionServiceSpec
   6 specs
 tests.specs.unit.SessionSpec
   3 specs
-tests.specs.integration.SessionsSpec
-  1 spec
+No integration specs are active yet; that comes in step `06`.
 ```
 
 TODO: Direct `box testbox run options:dryRun=true` currently reaches dry-run
@@ -319,6 +316,7 @@ Expected active files:
 app/models/SessionDecisionService.bx
 tests/specs/unit/SessionDecisionServiceSpec.bx
 tests/specs/unit/SessionSpec.bx
+tests/specs/integration/SessionsSpec.bx
 ```
 
 The service should be fixed:

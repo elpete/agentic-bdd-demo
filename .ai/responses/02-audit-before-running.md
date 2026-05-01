@@ -32,7 +32,6 @@ box testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormat
 1 bundle discovered
 1 suite: SessionDecisionService
 3 specs discovered
-The repo-wide dry-run may also list the existing Sessions integration spec.
 No execution yet in dry-run mode
 ```
 

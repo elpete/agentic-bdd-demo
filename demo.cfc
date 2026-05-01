@@ -340,12 +340,14 @@ component {
 			runGit( "checkout -- app/models/SessionDecisionService.bx" );
 			deleteIfExists( variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx" );
 			deleteIfExists( variables.root & "tests/specs/unit/SessionSpec.bx" );
+			deleteIfExists( variables.root & "tests/specs/integration/SessionsSpec.bx" );
 			return;
 		}
 
 		if ( selected.action == "firstSpec" ) {
 			runGit( "checkout -- app/models/SessionDecisionService.bx" );
 			deleteIfExists( variables.root & "tests/specs/unit/SessionSpec.bx" );
+			deleteIfExists( variables.root & "tests/specs/integration/SessionsSpec.bx" );
 			fileCopy(
 				variables.root & "tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx",
 				variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx"
@@ -355,12 +357,14 @@ component {
 
 		if ( selected.action == "restoreSpecs" ) {
 			copyFinalImplementation();
-			copyFinalSpecs();
+			copyFinalUnitSpecs();
+			deleteIfExists( variables.root & "tests/specs/integration/SessionsSpec.bx" );
 			return;
 		}
 
 		if ( selected.action == "bug" ) {
-			copyFinalSpecs();
+			copyFinalUnitSpecs();
+			deleteIfExists( variables.root & "tests/specs/integration/SessionsSpec.bx" );
 			fileCopy(
 				variables.root & "tests/resources/intentional-bug/SessionDecisionService.bx",
 				variables.root & "app/models/SessionDecisionService.bx"
@@ -370,7 +374,8 @@ component {
 
 		if ( selected.action == "final" ) {
 			copyFinalImplementation();
-			copyFinalSpecs();
+			copyFinalUnitSpecs();
+			copyFinalIntegrationSpec();
 			return;
 		}
 	}
@@ -382,7 +387,7 @@ component {
 		);
 	}
 
-	private function copyFinalSpecs(){
+	private function copyFinalUnitSpecs(){
 		fileCopy(
 			variables.root & "tests/resources/demo-states/final/SessionDecisionServiceSpec.bx",
 			variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx"
@@ -390,6 +395,13 @@ component {
 		fileCopy(
 			variables.root & "tests/resources/demo-states/final/SessionSpec.bx",
 			variables.root & "tests/specs/unit/SessionSpec.bx"
+		);
+	}
+
+	private function copyFinalIntegrationSpec(){
+		fileCopy(
+			variables.root & "tests/resources/demo-states/final/SessionsSpec.bx",
+			variables.root & "tests/specs/integration/SessionsSpec.bx"
 		);
 	}
 
@@ -487,7 +499,7 @@ component {
 				"description" : "Do not change code. Show the critique pass before execution.",
 				"promptFile" : ".ai/prompts/02-audit-before-running.md",
 				"responseFile" : ".ai/responses/02-audit-before-running.md",
-				"action" : "none",
+				"action" : "firstSpec",
 				"changed" : [ "No code changes" ],
 				"command" : "box run-script test:dry"
 			},
@@ -507,7 +519,7 @@ component {
 				"description" : "Keep code steady and inspect discovered bundles, suites, and specs before execution.",
 				"promptFile" : ".ai/prompts/04-use-dry-run-discovery.md",
 				"responseFile" : ".ai/responses/04-use-dry-run-discovery.md",
-				"action" : "none",
+				"action" : "restoreSpecs",
 				"changed" : [ "No code changes" ],
 				"command" : "box run-script test:dry"
 			},
@@ -528,7 +540,7 @@ component {
 				"promptFile" : ".ai/prompts/06-improve-with-bdd-language.md",
 				"responseFile" : ".ai/responses/06-improve-with-bdd-language.md",
 				"action" : "final",
-				"changed" : [ "app/models/SessionDecisionService.bx", "tests/specs/unit/SessionDecisionServiceSpec.bx", "tests/specs/unit/SessionSpec.bx" ],
+				"changed" : [ "app/models/SessionDecisionService.bx", "tests/specs/unit/SessionDecisionServiceSpec.bx", "tests/specs/unit/SessionSpec.bx", "tests/specs/integration/SessionsSpec.bx" ],
 				"command" : "box testbox run outputFormats=mintext"
 			}
 		];

@@ -76,7 +76,7 @@ box run-script demo:reset
 
 The task stores the current demo step in `.demo-state.json`, which is ignored by git.
 
-State `00` is the checked-in baseline: the CFP scoring code exists, but the AI-generated unit specs have not been created yet. Later demo states copy in the first-pass spec, improved specs, intentional bug, and final green files.
+State `00` is the checked-in baseline: the CFP scoring code exists, but the AI-generated unit and integration specs have not been created yet. Later demo states copy in the first-pass spec, improved specs, intentional bug, and final green files. The integration spec appears only in the final review state.
 
 ## Current Known-Good State
 

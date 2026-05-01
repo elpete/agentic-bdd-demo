@@ -1,10 +1,10 @@
 # Summary
 
-The final suite is in decent shape for a live demo. The fixed implementation and improved unit specs are restored, and the suite has meaningful boundaries and exclusion behavior. I would not treat it as complete production coverage.
+The final suite is in decent shape for a live demo. The fixed implementation, improved unit specs, and one integration spec are restored. The suite has meaningful boundaries and exclusion behavior, but I would not treat it as complete production coverage.
 
 # Files Changed
 
-- None from this review. The demo state restores the known-good implementation and unit specs before the review.
+- None from this review. The demo state restores the known-good implementation, unit specs, and integration spec before the review.
 
 # High-Level Reasoning
 

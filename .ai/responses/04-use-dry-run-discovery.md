@@ -1,6 +1,6 @@
 # Summary
 
-I used TestBox discovery before execution to inspect the generated suite shape. The service suite is discoverable, and the full demo suite count matches the intended final path.
+I used TestBox discovery before execution to inspect the generated suite shape. The unit suites are discoverable, and the spec count matches the intended pre-integration demo path.
 
 # Files Changed
 
@@ -34,11 +34,7 @@ tests.specs.unit.SessionSpec
     starts in draft
     requires title, abstract, speaker, and category before submission
     averages only completed non-conflicting reviews
-tests.specs.integration.SessionsSpec
-  Sessions handler
-    prepares a sample decision for the demo session
-
-10 specs discovered
+9 specs discovered
 ```
 
 # Risks / Things To Manually Review
