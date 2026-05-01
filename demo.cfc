@@ -114,25 +114,7 @@ component {
 		var current = getCurrentState();
 
 		try {
-			return multiselect()
-				.setQuestion( "Choose demo state" )
-				.setOptions(
-					getStates().map( ( state ) => {
-						return {
-							"display"  : "#state.id#  #state.title#",
-							"value"    : state.id,
-							"selected" : state.id == current
-						};
-					} ).append( {
-						"display"  : "q   Quit",
-						"value"    : "quit",
-						"selected" : false,
-						"accessKey" : "q"
-					} )
-				)
-				.setRequired( true )
-				.setMultiple( false )
-				.ask();
+			return pickStateWithKeyboard( current );
 		} catch ( any e ) {
 			print.yellowLine( "Interactive picker unavailable in this terminal. Falling back to typed selection." );
 			print.line();
@@ -150,6 +132,53 @@ component {
 		}
 	}
 
+	private string function pickStateWithKeyboard( required string current ){
+		var states = getStates();
+		var activeIndex = findStateIndex( arguments.current );
+
+		renderStatePicker( states, activeIndex );
+
+		while ( true ) {
+			var key = waitForKey();
+
+			if ( isQuitInput( key ) || key == "escape" ) {
+				return "quit";
+			}
+
+			if ( key == "key_up" || key == "back_tab" ) {
+				activeIndex = max( 1, activeIndex - 1 );
+			} else if ( key == "key_down" || key == chr( 9 ) ) {
+				activeIndex = min( arrayLen( states ), activeIndex + 1 );
+			} else if ( key == chr( 13 ) ) {
+				return states[ activeIndex ].id;
+			} else if ( isNumeric( key ) ) {
+				var shortcutState = normalizeStateID( key );
+				if ( hasState( shortcutState ) ) {
+					return shortcutState;
+				}
+			}
+
+			shell.clearScreen();
+			printMenuHeader();
+			renderStatePicker( states, activeIndex );
+		}
+	}
+
+	private function renderStatePicker( required array states, required numeric activeIndex ){
+		print.boldLine( "Choose demo state" );
+
+		for ( var i = 1; i <= arrayLen( arguments.states ); i++ ) {
+			var state = arguments.states[ i ];
+			var marker = i == arguments.activeIndex ? ">" : " ";
+			var currentMarker = state.id == getCurrentState() ? " current" : "";
+			print.line( "#marker# #state.id#  #state.title##currentMarker#" );
+		}
+
+		print.line();
+		print.line( "Use Up/Down, Enter to apply, or q to quit." );
+		print.toConsole();
+	}
+
 	private boolean function pauseForMenu(){
 		print.line();
 		var response = ask( message = 'Press Enter to return to the menu, or "q" to quit.' );
@@ -158,6 +187,28 @@ component {
 
 	private boolean function isQuitInput( required string value ){
 		return listFindNoCase( "q,quit,exit", trim( arguments.value ) );
+	}
+
+	private numeric function findStateIndex( required string state ){
+		var states = getStates();
+
+		for ( var i = 1; i <= arrayLen( states ); i++ ) {
+			if ( states[ i ].id == arguments.state ) {
+				return i;
+			}
+		}
+
+		return 1;
+	}
+
+	private boolean function hasState( required string state ){
+		for ( var item in getStates() ) {
+			if ( item.id == arguments.state ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	private function applyRelativeState( required numeric offset ){
