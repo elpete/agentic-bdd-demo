@@ -165,13 +165,22 @@ component {
 	}
 
 	private function renderStatePicker( required array states, required numeric activeIndex ){
+		var current = getCurrentState();
+
 		print.boldLine( "Choose demo state" );
 
 		for ( var i = 1; i <= arrayLen( arguments.states ); i++ ) {
 			var state = arguments.states[ i ];
 			var marker = i == arguments.activeIndex ? ">" : " ";
-			var currentMarker = state.id == getCurrentState() ? " current" : "";
-			print.line( "#marker# #state.id#  #state.title##currentMarker#" );
+			var stateLine = "#marker# #state.id#  #state.title#";
+
+			if ( state.id == current ) {
+				print.boldGreenLine( "#stateLine# [current]" );
+			} else if ( i == arguments.activeIndex ) {
+				print.boldCyanLine( stateLine );
+			} else {
+				print.line( stateLine );
+			}
 		}
 
 		print.line();
