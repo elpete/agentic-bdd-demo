@@ -47,7 +47,7 @@ http://127.0.0.1:42518
 - `.ai/responses/` contains saved idealized responses.
 - `.ai/demo-output/streaming-test-run.txt` contains an offline streaming transcript.
 - `tests/resources/intentional-bug/SessionDecisionService.bx` contains the failing threshold implementation for Beat 4.
-- `demo.cfc` is the demo state controller. It can move forward/backward through the fake prompt sequence, apply code states, and print saved AI responses.
+- `demo.cfc` is the demo state controller. It shows the current state inside the full state list, applies the selected state, and prints saved AI responses.
 
 ## Demo State Controller
 
@@ -57,7 +57,7 @@ Run one command and use the menu:
 box task run demo
 ```
 
-The menu can pick any state, move forward/backward, show the current prompt/response, list states, and reset to the final green state.
+The menu is the state list. The current state is checked, and choosing a different state transitions the repo to that state.
 
 Shortcut scripts are also available:
 

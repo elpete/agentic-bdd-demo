@@ -32,14 +32,7 @@ Use one command when you want to move through the fake prompt sequence without h
 box task run demo
 ```
 
-The menu can:
-
-- pick any state
-- move next or back
-- show the current prompt/response
-- list states
-- reset to the final green state
-- quit
+The menu is the state list. The current state is checked, and choosing a different state transitions the repo to that state. Use Ctrl-C to exit the picker.
 
 Direct commands are still available if you want to jump without the menu:
 

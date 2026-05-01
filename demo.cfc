@@ -14,42 +14,10 @@ component {
 	}
 
 	function menu(){
-		var keepGoing = true;
-
-		while ( keepGoing ) {
+		while ( true ) {
 			printMenuHeader();
-			var action = chooseMenuAction();
-
-			switch ( action ) {
-				case "pick":
-					pick();
-					pauseForMenu();
-					break;
-				case "next":
-					next();
-					pauseForMenu();
-					break;
-				case "back":
-					back();
-					pauseForMenu();
-					break;
-				case "show":
-					show();
-					pauseForMenu();
-					break;
-				case "list":
-					list();
-					pauseForMenu();
-					break;
-				case "reset":
-					reset();
-					pauseForMenu();
-					break;
-				case "quit":
-					keepGoing = false;
-					print.greenLine( "Done." );
-					break;
-			}
+			pick();
+			pauseForMenu();
 		}
 	}
 
@@ -87,36 +55,7 @@ component {
 	}
 
 	function pick(){
-		var current = getCurrentState();
-		var selectedState = "";
-
-		try {
-			selectedState = multiselect()
-				.setQuestion( "Choose demo state" )
-				.setOptions(
-					getStates().map( ( state ) => {
-						return {
-							"display"  : "#state.id#  #state.title#",
-							"value"    : state.id,
-							"selected" : state.id == current
-						};
-					} )
-				)
-				.setRequired( true )
-				.setMultiple( false )
-				.ask();
-		} catch ( any e ) {
-			print.yellowLine( "Interactive picker unavailable in this terminal. Falling back to typed selection." );
-			print.line();
-			list();
-			print.line();
-			selectedState = ask( message = "Type a state id [#current#]: " );
-			if ( !len( trim( selectedState ) ) ) {
-				selectedState = current;
-			}
-		}
-
-		apply( selectedState );
+		apply( chooseState() );
 	}
 
 	function next(){
@@ -136,8 +75,8 @@ component {
 
 		print.line();
 		print.boldLine( "Agentic BDD Demo Console" );
-		printStateList( false );
 		print.line( "Next command: #current.command#" );
+		print.line( "Select a state to transition. Press Ctrl-C to exit." );
 		print.line();
 	}
 
@@ -159,55 +98,35 @@ component {
 		print.line( "Current state: #current#" );
 	}
 
-	private string function chooseMenuAction(){
+	private string function chooseState(){
+		var current = getCurrentState();
+
 		try {
 			return multiselect()
-				.setQuestion( "What do you want to do?" )
-				.setOptions( [
-					{ "display" : "Pick a demo state", "value" : "pick", "selected" : true },
-					{ "display" : "Next state", "value" : "next" },
-					{ "display" : "Previous state", "value" : "back" },
-					{ "display" : "Show current prompt/response", "value" : "show" },
-					{ "display" : "List states", "value" : "list" },
-					{ "display" : "Reset to final green state", "value" : "reset" },
-					{ "display" : "Quit", "value" : "quit" }
-				] )
+				.setQuestion( "Choose demo state" )
+				.setOptions(
+					getStates().map( ( state ) => {
+						return {
+							"display"  : "#state.id#  #state.title#",
+							"value"    : state.id,
+							"selected" : state.id == current
+						};
+					} )
+				)
 				.setRequired( true )
 				.setMultiple( false )
 				.ask();
 		} catch ( any e ) {
-			print.yellowLine( "Interactive menu unavailable in this terminal. Falling back to typed selection." );
-			print.line( "  1. Pick a demo state" );
-			print.line( "  2. Next state" );
-			print.line( "  3. Previous state" );
-			print.line( "  4. Show current prompt/response" );
-			print.line( "  5. List states" );
-			print.line( "  6. Reset to final green state" );
-			print.line( "  7. Quit" );
+			print.yellowLine( "Interactive picker unavailable in this terminal. Falling back to typed selection." );
+			print.line();
+			printStateList();
+			print.line();
 
-			var choice = ask( message = "Choose [1]: " );
-			if ( !len( trim( choice ) ) ) {
-				choice = "1";
+			var selectedState = ask( message = "Type a state id [#current#]: " );
+			if ( !len( trim( selectedState ) ) ) {
+				selectedState = current;
 			}
-
-			switch ( trim( choice ) ) {
-				case "2":
-					return "next";
-				case "3":
-					return "back";
-				case "4":
-					return "show";
-				case "5":
-					return "list";
-				case "6":
-					return "reset";
-				case "7":
-				case "q":
-				case "quit":
-					return "quit";
-				default:
-					return "pick";
-			}
+			return selectedState;
 		}
 	}
 
