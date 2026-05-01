@@ -16,7 +16,10 @@ component {
 	function menu(){
 		while ( true ) {
 			printMenuHeader();
-			pick();
+			if ( !pick() ) {
+				print.greenLine( "Done." );
+				return;
+			}
 			pauseForMenu();
 		}
 	}
@@ -55,7 +58,13 @@ component {
 	}
 
 	function pick(){
-		apply( chooseState() );
+		var selectedState = chooseState();
+		if ( selectedState == "quit" ) {
+			return false;
+		}
+
+		apply( selectedState );
+		return true;
 	}
 
 	function next(){
@@ -76,7 +85,7 @@ component {
 		print.line();
 		print.boldLine( "Agentic BDD Demo Console" );
 		print.line( "Next command: #current.command#" );
-		print.line( "Select a state to transition. Press Ctrl-C to exit." );
+		print.line( 'Select a state to transition. Press "q" to quit.' );
 		print.line();
 	}
 
@@ -111,6 +120,10 @@ component {
 							"value"    : state.id,
 							"selected" : state.id == current
 						};
+					} ).append( {
+						"display"  : "q   Quit",
+						"value"    : "quit",
+						"selected" : false
 					} )
 				)
 				.setRequired( true )
@@ -122,9 +135,12 @@ component {
 			printStateList();
 			print.line();
 
-			var selectedState = ask( message = "Type a state id [#current#]: " );
+			var selectedState = ask( message = 'Type a state id [#current#] or "q" to quit: ' );
 			if ( !len( trim( selectedState ) ) ) {
 				selectedState = current;
+			}
+			if ( listFindNoCase( "q,quit,exit", trim( selectedState ) ) ) {
+				return "quit";
 			}
 			return selectedState;
 		}
