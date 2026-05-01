@@ -1,6 +1,6 @@
 # Summary
 
-I used TestBox discovery before execution to inspect the generated suite shape. The suite names and counts match the intended demo path.
+I used TestBox discovery before execution to inspect the generated suite shape. The service suite is discoverable, and the full demo suite count matches the intended final path.
 
 # Files Changed
 
@@ -29,6 +29,16 @@ tests.specs.unit.SessionDecisionServiceSpec
     rejects a submitted session below the waitlist threshold
     waitlists an otherwise strong session until it has enough eligible reviews
     ignores incomplete and conflicted reviews when calculating the final decision
+tests.specs.unit.SessionSpec
+  Session
+    starts in draft
+    requires title, abstract, speaker, and category before submission
+    averages only completed non-conflicting reviews
+tests.specs.integration.SessionsSpec
+  Sessions handler
+    prepares a sample decision for the demo session
+
+10 specs discovered
 ```
 
 # Risks / Things To Manually Review

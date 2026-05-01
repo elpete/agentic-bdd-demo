@@ -518,7 +518,7 @@ component {
 				"promptFile" : ".ai/prompts/05-debug-failing-spec.md",
 				"responseFile" : ".ai/responses/05-debug-failing-spec.md",
 				"action" : "bug",
-				"changed" : [ "app/models/SessionDecisionService.bx" ],
+				"changed" : [ "app/models/SessionDecisionService.bx (intentional failing threshold comparison)" ],
 				"command" : "box run-script test:target"
 			},
 			{

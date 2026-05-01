@@ -1,22 +1,17 @@
 # Demo Runbook
 
+This repo is designed to be cloned and run offline. The checked-in code starts at
+demo state `00`: the app and domain models exist, but the AI-generated unit specs
+are not active yet.
+
 ## Setup
 
-Open the repo:
-
 ```bash
-cd /Users/elpete/Developer/github/elpete/agentic-bdd-demo
+cd /path/to/agentic-bdd-demo
 box install
 box server start
-box task run demo
+box task run demo list
 ```
-
-Open:
-
-- `README.md`
-- `.codex/guidelines.md`
-- `app/models/SessionDecisionService.bx`
-- `tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx`
 
 Expected app URL:
 
@@ -24,80 +19,194 @@ Expected app URL:
 http://127.0.0.1:42518
 ```
 
-## Demo State Controller
+Open these files before starting:
 
-Use one command when you want to move through the fake prompt sequence without hand-copying files:
+- `app/models/SessionDecisionService.bx`
+- `.codex/guidelines.md`
+- `.codex/skills/write-testbox-bdd-spec.md`
+- `.ai/prompts/`
+- `.ai/responses/`
+
+At state `00`, `tests/specs/unit/` should only contain `.gitkeep`.
+
+## Demo Controller
+
+Use the interactive menu:
 
 ```bash
 box task run demo
 ```
 
-The menu is the state list. The current state is highlighted. Press `q` to quit. Choosing a later state walks forward through every intermediate state, types the saved prompt and response, pauses between sections, shows files changed, and exits. Choosing an earlier state applies that state, shows files changed, pauses once, and exits.
+Controls:
 
-Direct commands are still available if you want to jump without the menu:
+- Up/Down moves through states.
+- Enter applies the highlighted state.
+- `1` through `6` jumps directly to that step.
+- `q` quits.
+
+Direct commands are available when you want less ceremony:
 
 ```bash
 box task run demo list
+box task run demo apply 01
 box task run demo next
 box task run demo back
-box task run demo pick
-box task run demo apply 05
-box task run demo show 05
 box task run demo reset
 ```
 
-The task prints:
+Forward transitions type the saved prompt, wait, type the saved AI response,
+show files changed, then wait again. Backward transitions only apply files,
+show files changed, wait once, and exit.
 
-- the selected state
-- the saved prompt as typed agent-style output when moving forward
-- the saved AI response as typed agent-style output when moving forward
-- changed files in a presentation-friendly summary
-- the next command to run
+## State Map
 
-State `00` is the checked-in baseline: the app and service exist, but the AI-generated unit specs are not active yet. State `01` creates only the first `SessionDecisionServiceSpec`. State `03` adds the improved unit specs. State `05` changes only the service implementation to create the intentional failure. State `06` restores the final green implementation and unit specs.
+| State | Purpose | Active code after state |
+| --- | --- | --- |
+| `00` | Baseline before AI tests | App code only; no active generated unit specs |
+| `01` | First generated spec | `SessionDecisionServiceSpec.bx` only, shallow first pass |
+| `02` | Audit before running | No file changes from `01` |
+| `03` | Better BDD coverage | Final service spec plus `SessionSpec.bx` |
+| `04` | Dry-run discovery | No file changes from `03` |
+| `05` | Intentional failure | Same specs as `03`, service has strict `>` bug |
+| `06` | Final green review | Fixed service plus final unit specs |
 
-## Beat 1: The Intern Writes Tests
+The final green unit specs live in `tests/resources/demo-states/final/`.
+The first generated spec lives in `tests/resources/demo-states/01-first-spec/`.
+
+## Step 0: Baseline Orientation
+
+Command:
+
+```bash
+box task run demo apply 00
+```
 
 Show:
+
+- `app/models/SessionDecisionService.bx`
+- `app/models/Session.bx`
+- `tests/specs/unit/`
+
+Expected active files:
+
+```text
+tests/specs/unit/.gitkeep
+```
+
+Talk track:
+
+- The app has real CFP scoring behavior.
+- The service is intentionally under-tested at the start.
+- The point is not "AI writes tests"; the point is giving the agent a behavior map.
+
+Do not run `box run-script test:target` yet. The target spec does not exist in
+state `00`.
+
+## Step 1: The Intern Writes Tests
+
+Command:
+
+```bash
+box task run demo apply 01
+```
+
+The task shows:
 
 - `.ai/prompts/01-generate-first-spec.md`
 - `.ai/responses/01-generate-first-spec.md`
-- `tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx`
 
-Or apply and show both with:
-
-```bash
-box run-script demo:apply 01
-```
-
-Paste prompt:
+Expected active files:
 
 ```text
-Generate TestBox BDD specs for SessionDecisionService.
-Follow project conventions.
-Focus on behavior, not implementation details.
+tests/specs/unit/SessionDecisionServiceSpec.bx
 ```
 
-Point out:
+Expected first-pass coverage:
 
-- Useful status coverage.
-- A few shallow cases.
-- One assertion that might be public-output useful or implementation-coupled depending on the API contract.
+```text
+SessionDecisionService
+  returns draft for a new session
+  returns accepted for a high-scoring submitted session
+  returns a decision struct with expected keys
+```
 
-## Beat 2: Give The Agent A Map
+Optional command:
 
-Show:
+```bash
+box run-script test:target
+```
 
-- `.codex/guidelines.md`
-- `.codex/skills/write-testbox-bdd-spec.md`
-- `.codex/skills/convert-boilerplate-to-bdd.md`
+Talking points:
+
+- It is useful, but shallow.
+- It misses exact threshold boundaries.
+- It misses incomplete/conflicted review exclusion.
+- The decision-shape assertion is a mild test smell.
+
+## Step 2: Audit Before Running
+
+Command:
+
+```bash
+box task run demo apply 02
+```
+
+No files should change from state `01`.
+
+The task shows:
+
+- `.ai/prompts/02-audit-before-running.md`
+- `.ai/responses/02-audit-before-running.md`
+
+Optional discovery command:
+
+```bash
+box run-script test:dry
+```
+
+Expected discovery shape:
+
+```text
+tests.specs.unit.SessionDecisionServiceSpec
+  3 specs
+tests.specs.integration.SessionsSpec
+  1 spec
+```
+
+Talking point:
+
+```text
+Dry-run is the code review before the code review.
+```
+
+## Step 3: Give The Agent A Map
+
+Command:
+
+```bash
+box task run demo apply 03
+```
+
+The task shows:
+
 - `.ai/prompts/03-fix-bad-test-smells.md`
 - `.ai/responses/03-fix-bad-test-smells.md`
 
-Or advance/apply with:
+Expected active files:
 
-```bash
-box run-script demo:apply 03
+```text
+tests/specs/unit/SessionDecisionServiceSpec.bx
+tests/specs/unit/SessionSpec.bx
+```
+
+Expected service-spec behavior:
+
+```text
+accepts a submitted session when the average equals the acceptance threshold
+waitlists a submitted session when the average equals the waitlist threshold
+rejects a submitted session below the waitlist threshold
+waitlists an otherwise strong session until it has enough eligible reviews
+ignores incomplete and conflicted reviews when calculating the final decision
 ```
 
 Command:
@@ -106,35 +215,34 @@ Command:
 box run-script test:target
 ```
 
-Expected output shape:
+Expected:
 
 ```text
-tests.specs.unit.SessionDecisionServiceSpec
-Passed: 6
-Failed: 0
-Errors: 0
+6 specs
+0 failures
+0 errors
 ```
 
-Point out:
+Talking points:
 
-- Better test names.
-- Exact boundary values.
-- Incomplete and conflicted reviews.
+- BDD names now encode business rules.
+- Boundary values are explicit.
+- The tests describe what must be excluded from final decisions.
 
-## Beat 3: Audit Before Execution
+## Step 4: Dry-Run Discovery
 
-Show:
-
-- `.ai/prompts/02-audit-before-running.md`
-- `.ai/responses/02-audit-before-running.md`
-- `.ai/prompts/04-use-dry-run-discovery.md`
-- `.ai/responses/04-use-dry-run-discovery.md`
-
-Or advance/apply with:
+Command:
 
 ```bash
-box run-script demo:apply 04
+box task run demo apply 04
 ```
+
+No files should change from state `03`.
+
+The task shows:
+
+- `.ai/prompts/04-use-dry-run-discovery.md`
+- `.ai/responses/04-use-dry-run-discovery.md`
 
 Command:
 
@@ -142,28 +250,45 @@ Command:
 box run-script test:dry
 ```
 
-Expected output shape:
+Expected final discovery shape:
 
 ```text
 tests.specs.unit.SessionDecisionServiceSpec
-SessionDecisionService
-6 specs discovered
+  6 specs
+tests.specs.unit.SessionSpec
+  3 specs
+tests.specs.integration.SessionsSpec
+  1 spec
 ```
 
-TODO: `box testbox run options:dryRun=true` currently reaches the TestBox 7 runner but CommandBox 6.3.2 expects normal execution totals and errors with `key [TOTALFAIL] doesn't exist`. Use `box run-script test:dry`, which calls the dry-run runner endpoint directly, until the CLI parser/syntax is updated.
+TODO: Direct `box testbox run options:dryRun=true` currently reaches dry-run
+but CommandBox 6.3.2 expects normal execution totals and errors with
+`key [TOTALFAIL] doesn't exist`. Use `box run-script test:dry` for the demo.
 
-Demo point:
+## Step 5: Fast Feedback Loop
 
-```text
-Dry-run is the code review before the code review.
-```
-
-## Beat 4: Fast Feedback Loop
-
-Create the intentional failing state:
+Command:
 
 ```bash
-box run-script demo:apply 05
+box task run demo apply 05
+```
+
+Expected active change:
+
+```text
+app/models/SessionDecisionService.bx
+```
+
+The service intentionally uses strict threshold checks:
+
+```boxlang
+if ( averageScore > variables.acceptanceThreshold )
+if ( averageScore > variables.waitlistThreshold )
+```
+
+Command:
+
+```bash
 box run-script test:target
 ```
 
@@ -174,52 +299,49 @@ accepts a submitted session when the average equals the acceptance threshold
 expected accepted but received waitlisted or rejected
 ```
 
-Show:
+Talking points:
 
-- `.ai/prompts/05-debug-failing-spec.md`
-- `.ai/responses/05-debug-failing-spec.md`
+- The test is not the problem.
+- The business rule says threshold equality counts.
+- Keep the test; fix the implementation.
 
-Fix:
-
-```text
-Change strict threshold comparisons from > to >=.
-```
-
-Return to known-good quickly:
-
-```bash
-box run-script demo:reset
-box run-script test:target
-```
-
-If this is not a git repo yet, manually change both threshold comparisons in `app/models/SessionDecisionService.bx` back to `>=`.
-
-## Beat 5: Streaming Feedback Changes The Rhythm
-
-Show:
-
-- `.ai/demo-output/streaming-test-run.txt`
+## Step 6: Collaborator, Not Oracle
 
 Command:
 
 ```bash
-box run-script test:stream
+box task run demo apply 06
 ```
 
-Expected shape:
+Expected active files:
 
 ```text
-tests discovered
-individual specs starting
-one failure
-fix
-rerun
-green suite
+app/models/SessionDecisionService.bx
+tests/specs/unit/SessionDecisionServiceSpec.bx
+tests/specs/unit/SessionSpec.bx
 ```
 
-If streaming output is noisy or the venue network slows the demo, show the saved transcript. The repo is reliable offline because the transcript and AI responses are checked in.
+The service should be fixed:
 
-## Beat 6: Collaborator, Not Oracle
+```boxlang
+if ( averageScore >= variables.acceptanceThreshold )
+if ( averageScore >= variables.waitlistThreshold )
+```
+
+Commands:
+
+```bash
+box run-script test:target
+box testbox run outputFormats=mintext
+```
+
+Expected final state:
+
+```text
+10 specs
+0 failures
+0 errors
+```
 
 Show:
 
@@ -227,44 +349,44 @@ Show:
 - `.ai/responses/06-improve-with-bdd-language.md`
 - `tests/specs/integration/SessionsSpec.bx`
 
-Command:
-
-```bash
-box testbox run outputFormats=mintext
-```
-
-Expected final state:
-
-```text
-Passed: 10
-Failed: 0
-Errors: 0
-```
-
 Close with:
 
 ```text
 Tests are a source of truth, not a source of risk.
 ```
 
-## Reset Instructions
+## Streaming Beat
+
+Use this when you want to show the rhythm change without relying on live output:
 
 ```bash
-box server restart
-box run-script demo:reset
+box run-script test:stream
+```
+
+Fallback transcript:
+
+```text
+.ai/demo-output/streaming-test-run.txt
+```
+
+## Reset Instructions
+
+Return to final green:
+
+```bash
+box task run demo reset
 box testbox run outputFormats=mintext
 ```
 
-If there is no git history:
+Return to the beginning of the story:
 
-1. Run `box run-script demo:reset`.
-2. Open `app/models/SessionDecisionService.bx` and ensure both decision threshold checks use `>=`.
-3. Run `box testbox run outputFormats=mintext`.
+```bash
+box task run demo apply 00
+```
 
-## If A Command Fails
+If commands fail:
 
 - `Connection refused`: run `box server start` and retry.
 - `Address already in use`: run `box server stop`, then `box server start`.
-- Dry-run CLI parser error: use `box run-script test:dry`.
-- BoxLang reserved-scope weirdness: check for local variables named `session`, `request`, `application`, `url`, or `form`.
+- Dry-run parser error: use `box run-script test:dry`.
 - Noisy streaming output: show `.ai/demo-output/streaming-test-run.txt`.

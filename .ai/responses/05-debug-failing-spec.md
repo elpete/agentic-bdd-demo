@@ -1,10 +1,10 @@
 # Summary
 
-The failing spec is valid. The implementation uses strict `>` threshold checks, but the business rule says a session at the threshold qualifies. I changed the comparisons to `>=`.
+The failing spec is valid. The implementation in this demo state uses strict `>` threshold checks, but the business rule says a session at the threshold qualifies. The smallest safe fix is to change the comparisons to `>=`.
 
 # Files Changed
 
-- `app/models/SessionDecisionService.bx`
+- `app/models/SessionDecisionService.bx` currently shows the intentional failing implementation
 
 # High-Level Reasoning
 
@@ -16,7 +16,7 @@ accepts a submitted session when the average equals the acceptance threshold
 
 The test data has three completed non-conflicting reviews with an average of exactly `4`. The service rejected acceptance because it required the score to be greater than `4`.
 
-That is an implementation bug, not a test bug. The smallest safe fix is changing threshold comparisons from `>` to `>=` for both accepted and waitlisted decisions.
+That is an implementation bug, not a test bug. In the live demo I would keep the failing test, change threshold comparisons from `>` to `>=` for both accepted and waitlisted decisions, and rerun the targeted suite. This scripted state intentionally leaves the bug visible so the failure can be demonstrated before resetting to the final green state.
 
 # Commands To Run
 
@@ -30,9 +30,13 @@ box testbox run outputFormats=mintext
 
 ```text
 SessionDecisionService
-  accepts a submitted session when the average equals the acceptance threshold  PASS
-  waitlists a submitted session when the average equals the waitlist threshold  PASS
+  accepts a submitted session when the average equals the acceptance threshold  FAIL
+
+Expected: accepted
+Actual: waitlisted
 ```
+
+After the fix, the equality boundary specs should pass.
 
 # Risks / Things To Manually Review
 
