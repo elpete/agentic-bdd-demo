@@ -23,12 +23,7 @@ AI can generate tests, but BDD plus framework-aware guidance makes those tests t
 ```bash
 box install
 box server start
-box run-script demo:list
-box run-script demo:next
-box run-script demo:back
-box run-script demo:pick
-box run-script demo:apply 05
-box run-script demo:reset
+box task run
 box run-script test:dry
 box run-script test:target
 box run-script test:unit
@@ -56,19 +51,18 @@ http://127.0.0.1:42518
 
 ## Demo State Controller
 
+Run one command and use the menu:
+
 ```bash
 box task run
-box task run task.cfc apply 01
-box task run task.cfc next
-box task run task.cfc back
-box task run task.cfc pick
-box task run task.cfc show 05
-box task run task.cfc reset
 ```
+
+The menu can pick any state, move forward/backward, show the current prompt/response, list states, and reset to the final green state.
 
 Shortcut scripts are also available:
 
 ```bash
+box run-script demo:menu
 box run-script demo:list
 box run-script demo:next
 box run-script demo:back

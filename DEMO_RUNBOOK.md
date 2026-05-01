@@ -8,7 +8,7 @@ Open the repo:
 cd /Users/elpete/Developer/github/elpete/agentic-bdd-demo
 box install
 box server start
-box run-script demo:list
+box task run
 ```
 
 Open:
@@ -26,22 +26,25 @@ http://127.0.0.1:42518
 
 ## Demo State Controller
 
-Use this when you want to move through the fake prompt sequence without hand-copying files:
-
-```bash
-box run-script demo:list
-box run-script demo:next
-box run-script demo:back
-box run-script demo:pick
-box run-script demo:apply 05
-box run-script demo:show 05
-box run-script demo:reset
-```
-
-Equivalent raw CommandBox task syntax:
+Use one command when you want to move through the fake prompt sequence without hand-copying files:
 
 ```bash
 box task run
+```
+
+The menu can:
+
+- pick any state
+- move next or back
+- show the current prompt/response
+- list states
+- reset to the final green state
+- quit
+
+Direct commands are still available if you want to jump without the menu:
+
+```bash
+box task run task.cfc list
 box task run task.cfc next
 box task run task.cfc back
 box task run task.cfc pick
