@@ -20,7 +20,10 @@ component {
 				print.greenLine( "Done." );
 				return;
 			}
-			pauseForMenu();
+			if ( !pauseForMenu() ) {
+				print.greenLine( "Done." );
+				return;
+			}
 		}
 	}
 
@@ -59,7 +62,7 @@ component {
 
 	function pick(){
 		var selectedState = chooseState();
-		if ( selectedState == "quit" ) {
+		if ( isQuitInput( selectedState ) ) {
 			return false;
 		}
 
@@ -123,7 +126,8 @@ component {
 					} ).append( {
 						"display"  : "q   Quit",
 						"value"    : "quit",
-						"selected" : false
+						"selected" : false,
+						"accessKey" : "q"
 					} )
 				)
 				.setRequired( true )
@@ -139,16 +143,21 @@ component {
 			if ( !len( trim( selectedState ) ) ) {
 				selectedState = current;
 			}
-			if ( listFindNoCase( "q,quit,exit", trim( selectedState ) ) ) {
+			if ( isQuitInput( selectedState ) ) {
 				return "quit";
 			}
 			return selectedState;
 		}
 	}
 
-	private function pauseForMenu(){
+	private boolean function pauseForMenu(){
 		print.line();
-		ask( message = "Press Enter to return to the menu." );
+		var response = ask( message = 'Press Enter to return to the menu, or "q" to quit.' );
+		return !isQuitInput( response );
+	}
+
+	private boolean function isQuitInput( required string value ){
+		return listFindNoCase( "q,quit,exit", trim( arguments.value ) );
 	}
 
 	private function applyRelativeState( required numeric offset ){
