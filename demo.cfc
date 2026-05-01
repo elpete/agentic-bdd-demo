@@ -54,7 +54,7 @@ component {
 	}
 
 	function reset(){
-		transitionToState( "06" );
+		runQuietTransition( findState( "06" ) );
 	}
 
 	private function printMenuHeader(){
@@ -336,8 +336,16 @@ component {
 	}
 
 	private function applyStateChanges( required struct selected ){
+		if ( selected.action == "baseline" ) {
+			runGit( "checkout -- app/models/SessionDecisionService.bx" );
+			deleteIfExists( variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx" );
+			deleteIfExists( variables.root & "tests/specs/unit/SessionSpec.bx" );
+			return;
+		}
+
 		if ( selected.action == "firstSpec" ) {
-			runGit( "checkout -- app/models/SessionDecisionService.bx tests/specs/unit/SessionSpec.bx" );
+			runGit( "checkout -- app/models/SessionDecisionService.bx" );
+			deleteIfExists( variables.root & "tests/specs/unit/SessionSpec.bx" );
 			fileCopy(
 				variables.root & "tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx",
 				variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx"
@@ -346,12 +354,13 @@ component {
 		}
 
 		if ( selected.action == "restoreSpecs" ) {
-			runGit( "checkout -- app/models/SessionDecisionService.bx tests/specs/unit/SessionDecisionServiceSpec.bx tests/specs/unit/SessionSpec.bx" );
+			copyFinalImplementation();
+			copyFinalSpecs();
 			return;
 		}
 
 		if ( selected.action == "bug" ) {
-			runGit( "checkout -- tests/specs/unit/SessionDecisionServiceSpec.bx tests/specs/unit/SessionSpec.bx" );
+			copyFinalSpecs();
 			fileCopy(
 				variables.root & "tests/resources/intentional-bug/SessionDecisionService.bx",
 				variables.root & "app/models/SessionDecisionService.bx"
@@ -360,15 +369,40 @@ component {
 		}
 
 		if ( selected.action == "final" ) {
-			runGit( "checkout -- app/models/SessionDecisionService.bx tests/specs/unit/SessionDecisionServiceSpec.bx tests/specs/unit/SessionSpec.bx" );
+			copyFinalImplementation();
+			copyFinalSpecs();
 			return;
 		}
+	}
+
+	private function copyFinalImplementation(){
+		fileCopy(
+			variables.root & "tests/resources/demo-states/final/SessionDecisionService.bx",
+			variables.root & "app/models/SessionDecisionService.bx"
+		);
+	}
+
+	private function copyFinalSpecs(){
+		fileCopy(
+			variables.root & "tests/resources/demo-states/final/SessionDecisionServiceSpec.bx",
+			variables.root & "tests/specs/unit/SessionDecisionServiceSpec.bx"
+		);
+		fileCopy(
+			variables.root & "tests/resources/demo-states/final/SessionSpec.bx",
+			variables.root & "tests/specs/unit/SessionSpec.bx"
+		);
 	}
 
 	private function runGit( required string args ){
 		command( "run" )
 			.params( "git #arguments.args#" )
 			.run();
+	}
+
+	private function deleteIfExists( required string path ){
+		if ( fileExists( arguments.path ) ) {
+			fileDelete( arguments.path );
+		}
 	}
 
 	private function printChat( required struct selected ){
@@ -433,8 +467,8 @@ component {
 				"description" : "Start clean, explain the CFP scoring domain, and open the service under test.",
 				"promptFile" : "",
 				"responseFile" : "",
-				"action" : "final",
-				"changed" : [ "app/models/SessionDecisionService.bx", "tests/specs/unit/SessionDecisionServiceSpec.bx", "tests/specs/unit/SessionSpec.bx" ],
+				"action" : "baseline",
+				"changed" : [ "Remove tests/specs/unit/SessionDecisionServiceSpec.bx", "Remove tests/specs/unit/SessionSpec.bx" ],
 				"command" : "Open app/models/SessionDecisionService.bx"
 			},
 			{

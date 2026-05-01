@@ -24,6 +24,7 @@ AI can generate tests, but BDD plus framework-aware guidance makes those tests t
 box install
 box server start
 box task run demo
+box run-script demo:reset
 box run-script test:dry
 box run-script test:target
 box run-script test:unit
@@ -46,6 +47,7 @@ http://127.0.0.1:42518
 - `.ai/prompts/` contains paste-ready prompts.
 - `.ai/responses/` contains saved idealized responses.
 - `.ai/demo-output/streaming-test-run.txt` contains an offline streaming transcript.
+- `tests/resources/demo-states/final/` contains the final known-good service and unit specs.
 - `tests/resources/intentional-bug/SessionDecisionService.bx` contains the failing threshold implementation for Beat 4.
 - `demo.cfc` is the demo state controller. It shows the current state inside the full state list and presents forward transitions as staged prompt/response walkthroughs.
 
@@ -74,7 +76,15 @@ box run-script demo:reset
 
 The task stores the current demo step in `.demo-state.json`, which is ignored by git.
 
+State `00` is the checked-in baseline: the CFP scoring code exists, but the AI-generated unit specs have not been created yet. Later demo states copy in the first-pass spec, improved specs, intentional bug, and final green files.
+
 ## Current Known-Good State
+
+Restore the final green state first:
+
+```bash
+box run-script demo:reset
+```
 
 The final suite should report:
 

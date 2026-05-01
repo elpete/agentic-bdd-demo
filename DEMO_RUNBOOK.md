@@ -16,7 +16,7 @@ Open:
 - `README.md`
 - `.codex/guidelines.md`
 - `app/models/SessionDecisionService.bx`
-- `tests/specs/unit/SessionDecisionServiceSpec.bx`
+- `tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx`
 
 Expected app URL:
 
@@ -54,12 +54,15 @@ The task prints:
 - changed files in a presentation-friendly summary
 - the next command to run
 
+State `00` is the checked-in baseline: the app and service exist, but the AI-generated unit specs are not active yet. State `01` creates only the first `SessionDecisionServiceSpec`. State `03` adds the improved unit specs. State `05` changes only the service implementation to create the intentional failure. State `06` restores the final green implementation and unit specs.
+
 ## Beat 1: The Intern Writes Tests
 
 Show:
 
 - `.ai/prompts/01-generate-first-spec.md`
 - `.ai/responses/01-generate-first-spec.md`
+- `tests/resources/demo-states/01-first-spec/SessionDecisionServiceSpec.bx`
 
 Or apply and show both with:
 
@@ -247,7 +250,6 @@ Tests are a source of truth, not a source of risk.
 ## Reset Instructions
 
 ```bash
-git checkout -- app/models/SessionDecisionService.bx
 box server restart
 box run-script demo:reset
 box testbox run outputFormats=mintext
@@ -255,9 +257,9 @@ box testbox run outputFormats=mintext
 
 If there is no git history:
 
-1. Open `app/models/SessionDecisionService.bx`.
-2. Ensure both decision threshold checks use `>=`.
-3. Run `box run-script test:target`.
+1. Run `box run-script demo:reset`.
+2. Open `app/models/SessionDecisionService.bx` and ensure both decision threshold checks use `>=`.
+3. Run `box testbox run outputFormats=mintext`.
 
 ## If A Command Fails
 
