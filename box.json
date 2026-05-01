@@ -39,14 +39,14 @@
         "test:unit":"testbox run directory=tests.specs.unit outputFormats=mintext",
         "test:target":"testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormats=mintext",
         "test:stream":"testbox run --streaming",
-        "demo:list":"task run task.cfc list",
-        "demo:menu":"task run",
-        "demo:next":"task run task.cfc next",
-        "demo:back":"task run task.cfc back",
-        "demo:pick":"task run task.cfc pick",
-        "demo:reset":"task run task.cfc reset",
-        "demo:show":"task run task.cfc show ${1}",
-        "demo:apply":"task run task.cfc apply ${1}"
+        "demo:list":"task run demo list",
+        "demo:menu":"task run demo",
+        "demo:next":"task run demo next",
+        "demo:back":"task run demo back",
+        "demo:pick":"task run demo pick",
+        "demo:reset":"task run demo reset",
+        "demo:show":"task run demo show ${1}",
+        "demo:apply":"task run demo apply ${1}"
     },
     "testbox":{
         "runner":"/tests/runner.bxm"

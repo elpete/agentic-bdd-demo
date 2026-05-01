@@ -23,7 +23,7 @@ AI can generate tests, but BDD plus framework-aware guidance makes those tests t
 ```bash
 box install
 box server start
-box task run
+box task run demo
 box run-script test:dry
 box run-script test:target
 box run-script test:unit
@@ -47,14 +47,14 @@ http://127.0.0.1:42518
 - `.ai/responses/` contains saved idealized responses.
 - `.ai/demo-output/streaming-test-run.txt` contains an offline streaming transcript.
 - `tests/resources/intentional-bug/SessionDecisionService.bx` contains the failing threshold implementation for Beat 4.
-- `task.cfc` is the demo state controller. It can move forward/backward through the fake prompt sequence, apply code states, and print saved AI responses.
+- `demo.cfc` is the demo state controller. It can move forward/backward through the fake prompt sequence, apply code states, and print saved AI responses.
 
 ## Demo State Controller
 
 Run one command and use the menu:
 
 ```bash
-box task run
+box task run demo
 ```
 
 The menu can pick any state, move forward/backward, show the current prompt/response, list states, and reset to the final green state.

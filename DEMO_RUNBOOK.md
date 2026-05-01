@@ -8,7 +8,7 @@ Open the repo:
 cd /Users/elpete/Developer/github/elpete/agentic-bdd-demo
 box install
 box server start
-box task run
+box task run demo
 ```
 
 Open:
@@ -29,7 +29,7 @@ http://127.0.0.1:42518
 Use one command when you want to move through the fake prompt sequence without hand-copying files:
 
 ```bash
-box task run
+box task run demo
 ```
 
 The menu can:
@@ -44,13 +44,13 @@ The menu can:
 Direct commands are still available if you want to jump without the menu:
 
 ```bash
-box task run task.cfc list
-box task run task.cfc next
-box task run task.cfc back
-box task run task.cfc pick
-box task run task.cfc apply 05
-box task run task.cfc show 05
-box task run task.cfc reset
+box task run demo list
+box task run demo next
+box task run demo back
+box task run demo pick
+box task run demo apply 05
+box task run demo show 05
+box task run demo reset
 ```
 
 The task prints:
