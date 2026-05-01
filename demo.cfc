@@ -14,7 +14,6 @@ component {
 	}
 
 	function menu(){
-		printMenuHeader();
 		if ( !pick() ) {
 			print.greenLine( "Done." );
 			return;
@@ -112,6 +111,8 @@ component {
 		var states = getStates();
 		var activeIndex = findStateIndex( arguments.current );
 
+		shell.clearScreen();
+		printMenuHeader();
 		renderStatePicker( states, activeIndex );
 
 		while ( true ) {
@@ -148,7 +149,8 @@ component {
 		for ( var i = 1; i <= arrayLen( arguments.states ); i++ ) {
 			var state = arguments.states[ i ];
 			var marker = i == arguments.activeIndex ? ">" : " ";
-			var stateLine = "#marker# #state.id#  #state.title#";
+			var shortcut = val( state.id );
+			var stateLine = "#marker# [#shortcut#] #state.id#  #state.title#";
 
 			if ( state.id == current ) {
 				print.boldGreenLine( "#stateLine# [current]" );
@@ -160,7 +162,7 @@ component {
 		}
 
 		print.line();
-		print.line( "Use Up/Down, Enter to apply, or q to quit." );
+		print.line( "Use Up/Down, Enter to apply, 1-6 to jump, or q to quit." );
 		print.toConsole();
 	}
 
