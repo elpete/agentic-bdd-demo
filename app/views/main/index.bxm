@@ -1,143 +1,42 @@
 <bx:output>
-<div class="text-center card shadow-sm bg-light border border-5 border-white">
-	<div class="card-body">
-		<div>
-			<img src="includes/images/ColdBoxLogo2015_300.png" class="m-2 mt-2" alt="logo" height="200"/>
-		</div>
-		<div class="badge bg-info mb-2">
-			<strong>#getColdBoxSetting( "version" )# (#getColdBoxSetting( "suffix" )#)</strong>
-		</div>
+<section class="pb-9 pt-14">
+	<p class="mb-3 mt-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Into the Box 2026 demo app</p>
+	<h1 class="m-0 max-w-[900px] text-[clamp(2.35rem,5vw,4.9rem)] font-bold leading-[1.08] tracking-normal">Agentic BDD/TDD Demo</h1>
+	<p class="mb-0 mt-4 max-w-[760px] text-xl text-muted">
+		A small ColdBox + BoxLang application for showing how executable behavior keeps
+		AI-assisted code honest in a real Conference Session Review workflow.
+	</p>
+</section>
 
-		<h1 class="display-5 fw-bold">
-			#prc.welcomeMessage#
-		</h1>
-
-		<div class="col-lg-6 mx-auto">
-			<p class="lead mb-4">
-				Welcome to BoxLang HMVC development.  You can now start building your application with ease, we already did the hard work
-				for you.
-			</p>
-		</div>
+<section class="grid grid-cols-[minmax(180px,0.45fr)_1fr] gap-6 border-t border-line py-8 max-demo:block">
+	<div>
+		<p class="mb-3 mt-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Scenario</p>
+		<h2 class="m-0 text-[1.35rem] font-bold leading-[1.08] tracking-normal">CFP Scoring</h2>
 	</div>
-</div>
-<div class="container mb-5">
-	<div class="row py-5 row-cols-lg-2 gx-4">
-		<div class="col d-flex align-items-start">
-			<div class="bg-light text-blue flex-shrink-0 me-3 px-2 fs-2 rounded-circle shadow-sm border border-5 border-white">
-				<i class="bi bi-broadcast" aria-hidden="true"></i>
-			</div>
-			<div>
-				<h2 class="text-blue">Event Handlers</h2>
-				<p>
-				You can click on the following event handlers to execute their default action
-				<span class="badge bg-danger">index()</span>
-				</p>
-				<div class="list-group">
-					<bx:loop list="#getSetting("RegisteredHandlers")#" index="handler">
-						<a href="#event.buildLink( handler )#" class="list-group-item list-group-item-action d-flex gap-2 py-3" title="Run Event">
-							<div class="rounded-circle flex-shrink-0 text-success px-1">
-								<i class="bi bi-play-btn" aria-hidden="true"></i>
-							</div>
-							<div class="d-flex gap-2 w-100 justify-content-between">#handler#</div>
-						</a>
-					</bx:loop>
-				</div>
-			</div>
-		</div>
+	<p class="m-0 text-[1.08rem] text-muted">
+		The demo centers on realistic review rules: submissions must be complete, only eligible
+		reviews count, thresholds are explicit, and final decisions stay traceable to the behavior
+		the tests describe.
+	</p>
+</section>
 
-		<div class="col d-flex align-items-start">
-			<div class="bg-light text-blue flex-shrink-0 me-3 px-2 fs-2 rounded-circle shadow-sm border border-5 border-white">
-				<i class="bi bi-cpu-fill"></i>
-			</div>
-			<div>
-				<h2 class="text-blue">Modules</h2>
-				<p>
-				Here are your registered ColdBox Modules. Click on them to open their entry point.
-				</p>
-				<div class="list-group">
-					<bx:loop collection="#getSetting("Modules")#" item="thisModule">
-						<a href="#event.buildLink( getModuleConfig( thisModule ).inheritedEntryPoint )#" class="list-group-item list-group-item-action d-flex gap-2 py-3" title="Run Event">
-							<div class="rounded-circle flex-shrink-0 text-success px-1">
-								<i class="bi bi-play-btn" aria-hidden="true"></i>
-							</div>
-							<div class="d-flex gap-2 w-100 justify-content-between">#thisModule#</div>
-						</a>
+<section class="grid grid-cols-3 gap-4 max-demo:grid-cols-1" aria-label="Demo navigation">
+	<a class="block min-h-[230px] rounded-lg border border-line bg-panel p-5 no-underline shadow-panel transition hover:-translate-y-0.5 hover:border-blue max-demo:min-h-[180px]" href="#event.buildLink( "sessions" )#">
+		<span class="font-extrabold text-blue">01</span>
+		<h2 class="m-0 mt-12 text-[1.35rem] font-bold leading-[1.08] tracking-normal">Review Scenario</h2>
+		<p class="mb-0 mt-4 text-muted">Inspect the sample proposal, eligible reviews, and the resulting program decision.</p>
+	</a>
 
-					</bx:loop>
-				</div>
-			</div>
-		</div>
-	</div>
+	<a class="block min-h-[230px] rounded-lg border border-line bg-panel p-5 no-underline shadow-panel transition hover:-translate-y-0.5 hover:border-blue max-demo:min-h-[180px]" href="#event.buildLink( "tests" )#" target="_blank">
+		<span class="font-extrabold text-blue">02</span>
+		<h2 class="m-0 mt-12 text-[1.35rem] font-bold leading-[1.08] tracking-normal">BDD Harness</h2>
+		<p class="mb-0 mt-4 text-muted">Open the TestBox browser for the specs that drive the session decision behavior.</p>
+	</a>
 
-	<div class="row pb-5 row-cols-lg-2 gx-4">
-		<div class="col d-flex align-items-start">
-			<div class="bg-light text-blue flex-shrink-0 me-3 px-2 fs-2 rounded-circle shadow-sm border border-3 border-white">
-				<i class="bi bi-power"></i>
-			</div>
-			<div>
-				<h2 class="text-blue">Reinitialize ColdBox</h2>
-				<p>
-					ColdBox caches things in memory for you to increase performance.  If you make any configuration changes, add/modify modules, etc, please make sure you reinit the framework
-					so those changes take effect.  You can use the URL action shown below or CommandBox to issue a <code>coldbox reinit</code> command.
-				</p>
-				<table class="table table-striped">
-					<thead>
-						<th>URL Action</th>
-						<th width="100">Execute</th>
-					</thead>
-					<tbody>
-						<tr>
-							<td>
-								<em>?fwreinit=1</em><br/>
-								<em>?fwreinit={ReinitPassword}</em>
-							</td>
-							<td>
-								<a class="btn btn-dark" href="index.bxm?fwreinit=1">
-									<i class="bi bi-power" aria-hidden="true"></i> Run
-								</a>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-
-		<div class="col d-flex align-items-start">
-			<div class="bg-light text-blue flex-shrink-0 me-3 px-2 fs-2 rounded-circle shadow-sm border border-5 border-white">
-				<i class="bi bi-card-checklist" aria-hidden="true"></i>
-			</div>
-			<div>
-				<h2 class="text-blue">Tests</h2>
-				<p>
-				Unit and integration testing are integral parts to any ColdBox application.  We have scaffolded the test harness under the <code>tests</code> folder.
-				From here you can open the <strong>Tests Browser</strong> and also execute all your tests.  Please note that you can also run all your tests via
-				CommandBox: <code>testbox run</code>. You can even start a watcher which will check for source changes and run your tests for your: <code>testbox watch</code>
-				</p>
-
-				<div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-					<a
-						href="#event.buildLink( "tests" )#"
-						class="btn btn-dark btn-lg"
-						role="button"
-						target="_blank"
-					>
-						<i class="bi bi-binoculars" aria-hidden="true"></i>
-						Test Browser
-					</a>
-
-					<a
-						href="#event.buildLink( "tests" )#/runner.bxm"
-						class="btn btn-dark btn-lg"
-						role="button"
-						target="_blank"
-					>
-						<i class="bi bi-activity" aria-hidden="true"></i>
-						Test Runner
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-
+	<a class="block min-h-[230px] rounded-lg border border-line bg-panel p-5 no-underline shadow-panel transition hover:-translate-y-0.5 hover:border-blue max-demo:min-h-[180px]" href="#event.buildLink( "route-visualizer" )#">
+		<span class="font-extrabold text-blue">03</span>
+		<h2 class="m-0 mt-12 text-[1.35rem] font-bold leading-[1.08] tracking-normal">ColdBox Routes</h2>
+		<p class="mb-0 mt-4 text-muted">Browse the app surface and keep the framework wiring visible during the demo.</p>
+	</a>
+</section>
 </bx:output>

@@ -1,28 +1,46 @@
 <bx:output>
-<main class="container py-5">
-	<h1 class="display-6 fw-bold">Agentic BDD/TDD Demo</h1>
-	<p class="lead">Conference session review and CFP scoring in ColdBox + BoxLang.</p>
+<section class="pb-8 pt-8">
+	<p class="mb-3 mt-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Conference Session Review</p>
+	<h1 class="m-0 max-w-[820px] text-[clamp(2.15rem,4.5vw,4rem)] font-bold leading-[1.08] tracking-normal">#encodeForHTML( prc.proposal.title )#</h1>
+	<p class="mb-0 mt-4 max-w-[760px] text-xl text-muted">
+		#encodeForHTML( prc.proposal.abstract )#
+	</p>
+</section>
 
-	<section class="my-4">
-		<h2 class="h4">Session</h2>
-		<dl>
-			<dt>Title</dt>
-			<dd>#encodeForHTML( prc.proposal.title )#</dd>
-			<dt>Category</dt>
-			<dd>#encodeForHTML( prc.proposal.category )#</dd>
-			<dt>Status</dt>
-			<dd>#encodeForHTML( prc.proposal.status )#</dd>
+<section class="grid grid-cols-[1fr_0.78fr] gap-4 max-demo:grid-cols-1">
+	<div class="rounded-lg border border-line bg-panel p-5 shadow-panel">
+		<p class="mb-3 mt-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Proposal</p>
+		<dl class="m-0 grid grid-cols-[130px_1fr] gap-x-4 gap-y-4 max-demo:grid-cols-1 max-demo:gap-y-1">
+			<dt class="font-extrabold text-ink">Speaker</dt>
+			<dd class="m-0 text-muted">#encodeForHTML( prc.proposal.speaker.name )#</dd>
+			<dt class="font-extrabold text-ink">Category</dt>
+			<dd class="m-0 text-muted">#encodeForHTML( prc.proposal.category )#</dd>
+			<dt class="font-extrabold text-ink">Status</dt>
+			<dd class="m-0 text-muted">#encodeForHTML( prc.proposal.status )#</dd>
 		</dl>
-	</section>
+	</div>
 
-	<section class="my-4">
-		<h2 class="h4">Decision</h2>
-		<p>
-			<strong>#encodeForHTML( prc.decision.status )#</strong>
-			with #numberFormat( prc.decision.averageScore, "0.00" )# average from
-			#prc.decision.eligibleReviewCount# eligible reviews.
+	<div class="rounded-lg border border-line bg-green p-5 text-white shadow-panel">
+		<p class="mb-3 mt-0 text-[0.78rem] font-extrabold uppercase text-white/75 [letter-spacing:0.08em]">Decision</p>
+		<div class="text-[clamp(2rem,4vw,3.4rem)] font-bold leading-none tracking-normal">#encodeForHTML( prc.decision.status )#</div>
+		<p class="mb-0 mt-4 text-white/85">
+			#encodeForHTML( prc.decision.reason )#
 		</p>
-		<p>#encodeForHTML( prc.decision.reason )#</p>
-	</section>
-</main>
+	</div>
+</section>
+
+<section class="mt-4 grid grid-cols-3 gap-4 max-demo:grid-cols-1" aria-label="Decision metrics">
+	<div class="rounded-lg border border-line bg-panel p-5 shadow-panel">
+		<p class="m-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Average Score</p>
+		<p class="mb-0 mt-4 text-[2.35rem] font-bold leading-none">#numberFormat( prc.decision.averageScore, "0.00" )#</p>
+	</div>
+	<div class="rounded-lg border border-line bg-panel p-5 shadow-panel">
+		<p class="m-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Eligible Reviews</p>
+		<p class="mb-0 mt-4 text-[2.35rem] font-bold leading-none">#prc.decision.eligibleReviewCount#</p>
+	</div>
+	<div class="rounded-lg border border-line bg-panel p-5 shadow-panel">
+		<p class="m-0 text-[0.78rem] font-extrabold uppercase text-gold [letter-spacing:0.08em]">Workflow</p>
+		<p class="mb-0 mt-4 text-[1.15rem] font-bold leading-[1.25]">Behavior first, implementation second.</p>
+	</div>
+</section>
 </bx:output>

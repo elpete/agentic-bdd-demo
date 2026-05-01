@@ -77,7 +77,7 @@ Say:
 >
 > That distinction matters. We are not starting from an empty toy. We are starting from code that has behavior, and then we are going to ask an agent to help us describe that behavior.
 
-Point to `.codex/guidelines.md` and `.codex/skills/write-testbox-bdd-spec.md`.
+Point to `.ai/guidelines/custom/guidelines.md` and `.ai/skills/custom/write-testbox-bdd-spec.md`.
 
 Say:
 

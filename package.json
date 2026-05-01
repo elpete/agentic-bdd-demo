@@ -1,0 +1,11 @@
+{
+  "name": "agentic-bdd-demo",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./resources/css/app.css -o ./public/includes/css/app.css",
+    "watch:css": "tailwindcss -i ./resources/css/app.css -o ./public/includes/css/app.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.17"
+  }
+}
