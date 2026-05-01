@@ -32,6 +32,7 @@ Use this when you want to move through the fake prompt sequence without hand-cop
 box run-script demo:list
 box run-script demo:next
 box run-script demo:back
+box run-script demo:pick
 box run-script demo:apply 05
 box run-script demo:show 05
 box run-script demo:reset
@@ -43,6 +44,7 @@ Equivalent raw CommandBox task syntax:
 box task run
 box task run task.cfc next
 box task run task.cfc back
+box task run task.cfc pick
 box task run task.cfc apply 05
 box task run task.cfc show 05
 box task run task.cfc reset

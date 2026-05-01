@@ -26,6 +26,7 @@ box server start
 box run-script demo:list
 box run-script demo:next
 box run-script demo:back
+box run-script demo:pick
 box run-script demo:apply 05
 box run-script demo:reset
 box run-script test:dry
@@ -60,6 +61,7 @@ box task run
 box task run task.cfc apply 01
 box task run task.cfc next
 box task run task.cfc back
+box task run task.cfc pick
 box task run task.cfc show 05
 box task run task.cfc reset
 ```
@@ -70,6 +72,7 @@ Shortcut scripts are also available:
 box run-script demo:list
 box run-script demo:next
 box run-script demo:back
+box run-script demo:pick
 box run-script demo:apply 05
 box run-script demo:show 05
 box run-script demo:reset

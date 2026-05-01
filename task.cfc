@@ -16,6 +16,7 @@ component {
 		print.line( "  box task run task.cfc list" );
 		print.line( "  box task run task.cfc show 03" );
 		print.line( "  box task run task.cfc apply 05" );
+		print.line( "  box task run task.cfc pick" );
 		print.line( "  box task run task.cfc next" );
 		print.line( "  box task run task.cfc back" );
 		print.line( "  box task run task.cfc reset" );
@@ -24,6 +25,7 @@ component {
 		print.line( "  box run-script demo:list" );
 		print.line( "  box run-script demo:show 03" );
 		print.line( "  box run-script demo:apply 05" );
+		print.line( "  box run-script demo:pick" );
 		print.line( "  box run-script demo:next" );
 		print.line( "  box run-script demo:back" );
 		print.line( "  box run-script demo:reset" );
@@ -69,6 +71,39 @@ component {
 
 		print.line();
 		printChat( selected );
+	}
+
+	function pick(){
+		var current = getCurrentState();
+		var selectedState = "";
+
+		try {
+			selectedState = multiselect()
+				.setQuestion( "Choose demo state" )
+				.setOptions(
+					getStates().map( ( state ) => {
+						return {
+							"display"  : "#state.id#  #state.title#",
+							"value"    : state.id,
+							"selected" : state.id == current
+						};
+					} )
+				)
+				.setRequired( true )
+				.setMultiple( false )
+				.ask();
+		} catch ( any e ) {
+			print.yellowLine( "Interactive picker unavailable in this terminal. Falling back to typed selection." );
+			print.line();
+			list();
+			print.line();
+			selectedState = ask(
+				message = "Type a state id [#current#]: ",
+				defaultResponse = current
+			);
+		}
+
+		apply( selectedState );
 	}
 
 	function next(){

@@ -42,6 +42,7 @@
         "demo:list":"task run",
         "demo:next":"task run task.cfc next",
         "demo:back":"task run task.cfc back",
+        "demo:pick":"task run task.cfc pick",
         "demo:reset":"task run task.cfc reset",
         "demo:show":"task run task.cfc show ${1}",
         "demo:apply":"task run task.cfc apply ${1}"
