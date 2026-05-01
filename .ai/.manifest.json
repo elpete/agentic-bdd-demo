@@ -1,0 +1,218 @@
+{
+	"agents": ["codex"],
+	"language": "boxlang",
+	"skills": [
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "handler-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Implementation patterns for ColdBox handler development including CRUD operations, dependency injection, and event handling"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "rest-api-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Build RESTful APIs in ColdBox with proper HTTP methods, validation, error handling, and API best practices"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "module-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Create reusable ColdBox modules with proper structure, configuration, and integration patterns"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "interceptor-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Build ColdBox interceptors for cross-cutting concerns, event listening, and aspect-oriented programming"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "routing-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Configure ColdBox routes, RESTful resources, route groups, and advanced routing patterns"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "event-model",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master the ColdBox request context object for handling requests, responses, and application flow control"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "view-rendering",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Advanced view rendering techniques including partials, caching, helpers, and dynamic content generation"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "layout-development",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Create and manage ColdBox layouts and views with proper rendering, helpers, and dynamic content"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "cache-integration",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Implement caching strategies using CacheBox for improved application performance and scalability"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-syntax",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang syntax including class definitions, properties, methods, and modern language features"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-classes",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Design and implement BoxLang classes with proper structure, inheritance, interfaces, and design patterns"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-functions",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang function types, parameters, return types, closures, and functional programming patterns"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-lambdas",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master lambda expressions, arrow functions, and functional programming with BoxLang closures"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-modules",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang module system including imports, exports, module structure, and namespace management"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-streams",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang Stream API for functional-style data processing with lazy evaluation, filtering, mapping, and collection operations"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-types",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang type system including type hints, type checking, type coercion, and strong typing for robust code"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "boxlang-interop",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Master BoxLang interoperability with CFML, Java integration, calling Java classes, and seamless type conversions"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-bdd",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Practical guide to TestBox BDD workflows, including spec structure, readable scenario naming, expectation style, setup/teardown patterns, and maintainable behavior-focused tests."
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-unit",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Comprehensive guide to writing unit tests with TestBox, including test organization, assertions, expectations, data providers, and testing best practices for isolated component testing"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-integration",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Comprehensive guide to integration testing in ColdBox applications, including database integration, API testing, external service integration, and full-stack testing strategies"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-handler",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Comprehensive guide to testing ColdBox event handlers, including request context mocking, event execution, HTTP method testing, and validation testing for controllers"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-mocking",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Complete guide to mocking dependencies in tests using MockBox, including creating mocks, stubs, spies, and verification patterns"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-fixtures",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Comprehensive guide to test data management including fixtures, factories, seeders, and data builders for consistent and maintainable test data"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-coverage",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Complete guide to code coverage analysis in CFML/BoxLang applications, including coverage metrics, reporting, CI integration, and improving test coverage"
+		},
+		{
+			"source": "core",
+			"installedVersion": "8.10.1+28",
+			"name": "testing-ci",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "Complete guide to setting up continuous integration for automated testing, build pipelines, deployment workflows, and CI best practices"
+		}
+	],
+	"mcpServers": {
+		"module": [],
+		"custom": [],
+		"core": [
+			"boxlang",
+			"coldbox",
+			"commandbox",
+			"testbox",
+			"wirebox",
+			"cachebox",
+			"logbox"
+		]
+	},
+	"lastSync": "2026-04-30T18:55:39-06:00",
+	"coldboxCliVersion": "8.10.1+28",
+	"guidelines": [
+		{
+			"source": "coldbox-cli",
+			"installedVersion": "8.10.1+28",
+			"autoGenerated": false,
+			"name": "boxlang",
+			"type": "core",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "BoxLang modern JVM language syntax, class structure, data types, collections, interoperability, and best practices"
+		},
+		{
+			"source": "coldbox-cli",
+			"installedVersion": "8.10.1+28",
+			"autoGenerated": false,
+			"name": "coldbox",
+			"type": "core",
+			"syncedAt": "2026-04-30T18:55:39-06:00",
+			"description": "ColdBox HMVC framework conventions, structure, handlers, models, views, REST APIs, testing, and integrations"
+		}
+	],
+	"templateType": "modern",
+	"ACTIVEAGENT": "codex"
+}

@@ -43,5 +43,11 @@
     "testbox":{
         "runner":"/tests/runner.bxm"
     },
-    "description":"Conference Session Review / CFP Scoring demo for showing how BDD and framework-aware agent guidance make AI-generated tests safer."
+    "description":"Conference Session Review / CFP Scoring demo for showing how BDD and framework-aware agent guidance make AI-generated tests safer.",
+    "AI":{
+        "agents":[
+            "codex"
+        ],
+        "enabled":true
+    }
 }
