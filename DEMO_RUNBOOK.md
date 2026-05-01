@@ -8,6 +8,7 @@ Open the repo:
 cd /Users/elpete/Developer/github/elpete/agentic-bdd-demo
 box install
 box server start
+box run-script demo:list
 ```
 
 Open:
@@ -23,12 +24,50 @@ Expected app URL:
 http://127.0.0.1:42518
 ```
 
+## Demo State Controller
+
+Use this when you want to move through the fake prompt sequence without hand-copying files:
+
+```bash
+box run-script demo:list
+box run-script demo:next
+box run-script demo:back
+box run-script demo:apply 05
+box run-script demo:show 05
+box run-script demo:reset
+```
+
+Equivalent raw CommandBox task syntax:
+
+```bash
+box task run
+box task run task.cfc next
+box task run task.cfc back
+box task run task.cfc apply 05
+box task run task.cfc show 05
+box task run task.cfc reset
+```
+
+The task prints:
+
+- the selected state
+- changed files
+- the next command to run
+- the saved prompt under `You paste`
+- the saved response under `Codex says`
+
 ## Beat 1: The Intern Writes Tests
 
 Show:
 
 - `.ai/prompts/01-generate-first-spec.md`
 - `.ai/responses/01-generate-first-spec.md`
+
+Or apply and show both with:
+
+```bash
+box run-script demo:apply 01
+```
 
 Paste prompt:
 
@@ -53,6 +92,12 @@ Show:
 - `.codex/skills/convert-boilerplate-to-bdd.md`
 - `.ai/prompts/03-fix-bad-test-smells.md`
 - `.ai/responses/03-fix-bad-test-smells.md`
+
+Or advance/apply with:
+
+```bash
+box run-script demo:apply 03
+```
 
 Command:
 
@@ -84,6 +129,12 @@ Show:
 - `.ai/prompts/04-use-dry-run-discovery.md`
 - `.ai/responses/04-use-dry-run-discovery.md`
 
+Or advance/apply with:
+
+```bash
+box run-script demo:apply 04
+```
+
 Command:
 
 ```bash
@@ -111,7 +162,7 @@ Dry-run is the code review before the code review.
 Create the intentional failing state:
 
 ```bash
-cp tests/resources/intentional-bug/SessionDecisionService.bx app/models/SessionDecisionService.bx
+box run-script demo:apply 05
 box run-script test:target
 ```
 
@@ -136,7 +187,7 @@ Change strict threshold comparisons from > to >=.
 Return to known-good quickly:
 
 ```bash
-git checkout -- app/models/SessionDecisionService.bx
+box run-script demo:reset
 box run-script test:target
 ```
 
@@ -200,6 +251,7 @@ Tests are a source of truth, not a source of risk.
 ```bash
 git checkout -- app/models/SessionDecisionService.bx
 box server restart
+box run-script demo:reset
 box testbox run outputFormats=mintext
 ```
 

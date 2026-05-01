@@ -4,3 +4,4 @@ runtime/logs/
 tests/results/
 test-results-*.html
 .CommandBox/
+.demo-state.json

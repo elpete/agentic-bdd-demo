@@ -38,7 +38,13 @@
         "test:dry":"!curl -s 'http://127.0.0.1:42518/tests/runner.bxm?dryRun=true&reporter=json&directory=tests.specs&recurse=true'",
         "test:unit":"testbox run directory=tests.specs.unit outputFormats=mintext",
         "test:target":"testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormats=mintext",
-        "test:stream":"testbox run --streaming"
+        "test:stream":"testbox run --streaming",
+        "demo:list":"task run",
+        "demo:next":"task run task.cfc next",
+        "demo:back":"task run task.cfc back",
+        "demo:reset":"task run task.cfc reset",
+        "demo:show":"task run task.cfc show ${1}",
+        "demo:apply":"task run task.cfc apply ${1}"
     },
     "testbox":{
         "runner":"/tests/runner.bxm"

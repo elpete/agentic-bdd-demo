@@ -1,0 +1,64 @@
+class extends="testbox.system.BaseSpec" {
+
+	function run(){
+		describe( "SessionDecisionService", () => {
+			beforeEach( () => {
+				variables.service = new app.models.SessionDecisionService();
+			} );
+
+			it( "returns draft for a new session", () => {
+				var proposal = new app.models.Session();
+				var decision = variables.service.decide( proposal );
+
+				expect( decision.status ).toBe( "draft" );
+			} );
+
+			it( "returns accepted for a high-scoring submitted session", () => {
+				var proposal = validSubmittedSession()
+					.addReview( reviewWithScore( "alex", 5 ) )
+					.addReview( reviewWithScore( "blair", 5 ) )
+					.addReview( reviewWithScore( "casey", 5 ) );
+
+				var decision = variables.service.decide( proposal );
+
+				expect( decision.status ).toBe( "accepted" );
+			} );
+
+			it( "returns a decision struct with expected keys", () => {
+				var proposal = validSubmittedSession()
+					.addReview( reviewWithScore( "alex", 4 ) )
+					.addReview( reviewWithScore( "blair", 4 ) )
+					.addReview( reviewWithScore( "casey", 4 ) );
+
+				var decision = variables.service.decide( proposal );
+
+				expect( structKeyExists( decision, "status" ) ).toBeTrue();
+				expect( structKeyExists( decision, "averageScore" ) ).toBeTrue();
+				expect( structKeyExists( decision, "eligibleReviewCount" ) ).toBeTrue();
+			} );
+		} );
+	}
+
+	private any function validSubmittedSession(){
+		return new app.models.Session(
+			title = "Agentic BDD",
+			abstract = "A talk about using BDD to guide generated tests.",
+			speaker = new app.models.Speaker( name = "Jordan Lee", email = "jordan@example.test" ),
+			category = "Testing"
+		).submit();
+	}
+
+	private any function reviewWithScore( required string reviewer, required numeric score ){
+		return new app.models.Review(
+			reviewer = arguments.reviewer,
+			submitted = true,
+			scoreCard = new app.models.ScoreCard(
+				clarity = arguments.score,
+				relevance = arguments.score,
+				originality = arguments.score,
+				confidence = arguments.score
+			)
+		);
+	}
+
+}
