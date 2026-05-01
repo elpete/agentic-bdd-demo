@@ -28,8 +28,8 @@
         "route-visualizer":"lib/modules/route-visualizer/"
     },
     "scripts":{
-        "format":"cfformat run app/,tests/specs/,*.bx --overwrite --verbose",
-        "format:check":"cfformat check app/,tests/specs/,*.bx ./.cfformat.json --verbose",
+        "format":"cfformat run demo.cfc --overwrite --verbose",
+        "format:check":"cfformat check demo.cfc ./.cfformat.json --verbose",
         "format:watch":"cfformat watch path='app/,tests/specs/,*.bx' settingsPath='.cfformat.json'",
         "docker:build":"!docker build --no-cache -t my-coldbox-app -f ./docker/Dockerfile ./",
         "docker:run":"!docker run -it -p 8080:8080 my-coldbox-app",

@@ -13,6 +13,7 @@ Dry-run is acting like a code review checkpoint. Before executing generated test
 # Commands To Run
 
 ```bash
+# if the server is not already running:
 box server start
 box run-script test:dry
 box testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormats=mintext

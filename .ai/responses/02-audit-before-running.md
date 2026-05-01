@@ -20,7 +20,7 @@ Do discovery before execution:
 box run-script test:dry
 ```
 
-Then use the targeted run:
+When you are ready to execute after discovery, use the targeted run:
 
 ```bash
 box testbox run bundles=tests.specs.unit.SessionDecisionServiceSpec outputFormats=mintext

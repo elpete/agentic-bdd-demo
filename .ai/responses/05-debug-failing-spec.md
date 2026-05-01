@@ -8,7 +8,7 @@ The failing spec is valid. The implementation in this demo state uses strict `>`
 
 # High-Level Reasoning
 
-The failing case is:
+The first failing case is:
 
 ```text
 accepts a submitted session when the average equals the acceptance threshold
@@ -16,7 +16,9 @@ accepts a submitted session when the average equals the acceptance threshold
 
 The test data has three completed non-conflicting reviews with an average of exactly `4`. The service rejected acceptance because it required the score to be greater than `4`.
 
-That is an implementation bug, not a test bug. In the live demo I would keep the failing test, change threshold comparisons from `>` to `>=` for both accepted and waitlisted decisions, and rerun the targeted suite. This scripted state intentionally leaves the bug visible so the failure can be demonstrated before resetting to the final green state.
+The same strict-threshold bug also explains the waitlist boundary failure and the exclusion case that averages exactly `4` after incomplete and conflicted reviews are ignored.
+
+That is an implementation bug, not a test bug. In the live demo I would keep the failing tests, change threshold comparisons from `>` to `>=` for both accepted and waitlisted decisions, and rerun the targeted suite. This scripted state intentionally leaves the bug visible so the failure can be demonstrated before resetting to the final green state.
 
 # Commands To Run
 
@@ -31,9 +33,14 @@ box testbox run outputFormats=mintext
 ```text
 SessionDecisionService
   accepts a submitted session when the average equals the acceptance threshold  FAIL
+  waitlists a submitted session when the average equals the waitlist threshold  FAIL
+  ignores incomplete and conflicted reviews when calculating the final decision  FAIL
 
 Expected: accepted
 Actual: waitlisted
+
+Expected: waitlisted
+Actual: rejected
 ```
 
 After the fix, the equality boundary specs should pass.

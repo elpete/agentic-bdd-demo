@@ -44,10 +44,11 @@ http://127.0.0.1:42518
 
 - `.codex/guidelines.md` gives the agent ColdBox/TestBox conventions.
 - `.codex/skills/` contains small testing skills for the talk.
+- `.ai/guidelines/` and `.ai/skills/` mirror ColdBox AI guidance that can be refreshed or paired with MCP documentation servers.
 - `.ai/prompts/` contains paste-ready prompts.
 - `.ai/responses/` contains saved idealized responses.
 - `.ai/demo-output/streaming-test-run.txt` contains an offline streaming transcript.
-- `tests/resources/demo-states/final/` contains the final known-good service and unit specs.
+- `tests/resources/demo-states/final/` contains the final known-good service, unit specs, and integration spec.
 - `tests/resources/intentional-bug/SessionDecisionService.bx` contains the failing threshold implementation for Beat 4.
 - `demo.cfc` is the demo state controller. It shows the current state inside the full state list and presents forward transitions as staged prompt/response walkthroughs.
 

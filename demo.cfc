@@ -4,7 +4,7 @@ component {
 	property name="stateFile";
 
 	function init(){
-		variables.root = getDirectoryFromPath( getCurrentTemplatePath() );
+		variables.root      = getDirectoryFromPath( getCurrentTemplatePath() );
 		variables.stateFile = variables.root & ".demo-state.json";
 		return this;
 	}
@@ -62,8 +62,10 @@ component {
 
 		print.line();
 		print.boldLine( "Agentic BDD Demo Console" );
+		print.line( "Current beat: #current.id# - #current.title#" );
 		print.line( "Next command: #current.command#" );
-		print.line( 'Select a state to transition. Press "q" to quit.' );
+		print.line( "Select a state to transition. Press ""q"" to quit." );
+		printCurrentBriefing( current.id );
 		print.line();
 	}
 
@@ -83,6 +85,21 @@ component {
 
 		print.line();
 		print.line( "Current state: #current#" );
+		printCurrentBriefing( current );
+	}
+
+	private function printCurrentBriefing( required string stateID ){
+		var current = findState( arguments.stateID );
+
+		if ( !structKeyExists( current, "concepts" ) || !arrayLen( current.concepts ) ) {
+			return;
+		}
+
+		print.line();
+		print.boldLine( "Current state briefing" );
+		for ( var concept in current.concepts ) {
+			print.line( "  * #concept#" );
+		}
 	}
 
 	private string function chooseState(){
@@ -96,7 +113,7 @@ component {
 			printStateList();
 			print.line();
 
-			var selectedState = ask( message = 'Type a state id [#current#] or "q" to quit: ' );
+			var selectedState = ask( message = "Type a state id [#current#] or ""q"" to quit: " );
 			if ( !len( trim( selectedState ) ) ) {
 				selectedState = current;
 			}
@@ -108,7 +125,7 @@ component {
 	}
 
 	private string function pickStateWithKeyboard( required string current ){
-		var states = getStates();
+		var states      = getStates();
 		var activeIndex = findStateIndex( arguments.current );
 
 		shell.clearScreen();
@@ -147,9 +164,9 @@ component {
 		print.boldLine( "Choose demo state" );
 
 		for ( var i = 1; i <= arrayLen( arguments.states ); i++ ) {
-			var state = arguments.states[ i ];
-			var marker = i == arguments.activeIndex ? ">" : " ";
-			var shortcut = val( state.id );
+			var state     = arguments.states[ i ];
+			var marker    = i == arguments.activeIndex ? ">" : " ";
+			var shortcut  = val( state.id );
 			var stateLine = "#marker# [#shortcut#] #state.id#  #state.title#";
 
 			if ( state.id == current ) {
@@ -197,9 +214,9 @@ component {
 			error( "Unknown demo state [#arguments.targetState#]. Run `box task run demo list` to see available states." );
 		}
 
-		var states = getStates();
+		var states       = getStates();
 		var currentIndex = findStateIndex( getCurrentState() );
-		var targetIndex = findStateIndex( arguments.targetState );
+		var targetIndex  = findStateIndex( arguments.targetState );
 
 		if ( targetIndex > currentIndex ) {
 			for ( var i = currentIndex + 1; i <= targetIndex; i++ ) {
@@ -214,16 +231,16 @@ component {
 	private function runForwardTransition( required struct selected ){
 		printTransitionHeader( arguments.selected, "Forward transition" );
 		printTypedArtifact(
-			title = "Prompt",
-			filePath = arguments.selected.promptFile,
+			title        = "Prompt",
+			filePath     = arguments.selected.promptFile,
 			emptyMessage = "No prompt for this state."
 		);
 
 		waitForAnyKey( "Press any key to show the AI response..." );
 
 		printTypedArtifact(
-			title = "AI response",
-			filePath = arguments.selected.responseFile,
+			title        = "AI response",
+			filePath     = arguments.selected.responseFile,
 			emptyMessage = "No saved AI response for this state."
 		);
 
@@ -246,8 +263,21 @@ component {
 		print.boldCyanLine( repeatString( "=", 72 ) );
 		print.boldCyanLine( "#arguments.label#: #arguments.selected.id# - #arguments.selected.title#" );
 		print.line( arguments.selected.description );
+		printConcepts( arguments.selected );
 		print.boldCyanLine( repeatString( "=", 72 ) );
 		print.line();
+	}
+
+	private function printConcepts( required struct selected ){
+		if ( !structKeyExists( arguments.selected, "concepts" ) || !arrayLen( arguments.selected.concepts ) ) {
+			return;
+		}
+
+		print.line();
+		print.boldLine( "Concepts in this beat" );
+		for ( var concept in arguments.selected.concepts ) {
+			print.line( "  * #concept#" );
+		}
 	}
 
 	private function printTypedArtifact(
@@ -266,7 +296,12 @@ component {
 	}
 
 	private function typeText( required string text ){
-		var normalized = replace( arguments.text, chr( 13 ) & chr( 10 ), chr( 10 ), "all" );
+		var normalized = replace(
+			arguments.text,
+			chr( 13 ) & chr( 10 ),
+			chr( 10 ),
+			"all"
+		);
 		normalized = replace( normalized, chr( 13 ), chr( 10 ), "all" );
 
 		print.toConsole();
@@ -313,9 +348,9 @@ component {
 	}
 
 	private function applyRelativeState( required numeric offset ){
-		var states = getStates();
+		var states  = getStates();
 		var current = getCurrentState();
-		var index = 1;
+		var index   = 1;
 
 		for ( var i = 1; i <= arrayLen( states ); i++ ) {
 			if ( states[ i ].id == current ) {
@@ -406,9 +441,7 @@ component {
 	}
 
 	private function runGit( required string args ){
-		command( "run" )
-			.params( "git #arguments.args#" )
-			.run();
+		command( "run" ).params( "git #arguments.args#" ).run();
 	}
 
 	private function deleteIfExists( required string path ){
@@ -474,73 +507,120 @@ component {
 	private array function getStates(){
 		return [
 			{
-				"id" : "00",
-				"title" : "Baseline orientation",
-				"description" : "Start clean, explain the CFP scoring domain, and open the service under test.",
-				"promptFile" : "",
+				"id"           : "00",
+				"title"        : "Baseline orientation",
+				"description"  : "Start clean, explain the CFP scoring domain, and open the service under test.",
+				"promptFile"   : "",
 				"responseFile" : "",
-				"action" : "baseline",
-				"changed" : [ "Remove tests/specs/unit/SessionDecisionServiceSpec.bx", "Remove tests/specs/unit/SessionSpec.bx" ],
+				"action"       : "baseline",
+				"concepts"     : [
+					"ColdBox AI context: guidelines, skills, and framework docs give the agent conventions before code changes.",
+					"The app has real behavior but no active generated specs yet.",
+					"Tests start as a behavior map, not as implementation trivia."
+				],
+				"changed" : [
+					"Remove tests/specs/unit/SessionDecisionServiceSpec.bx",
+					"Remove tests/specs/unit/SessionSpec.bx",
+					"Remove tests/specs/integration/SessionsSpec.bx"
+				],
 				"command" : "Open app/models/SessionDecisionService.bx"
 			},
 			{
-				"id" : "01",
-				"title" : "First generated spec",
-				"description" : "Apply a useful but shallow first-pass AI spec with one implementation-shaped assertion.",
-				"promptFile" : ".ai/prompts/01-generate-first-spec.md",
+				"id"           : "01",
+				"title"        : "First generated spec",
+				"description"  : "Apply a useful but shallow first-pass AI spec with one implementation-shaped assertion.",
+				"promptFile"   : ".ai/prompts/01-generate-first-spec.md",
 				"responseFile" : ".ai/responses/01-generate-first-spec.md",
-				"action" : "firstSpec",
+				"action"       : "firstSpec",
+				"concepts"     : [
+					"Agents can quickly create plausible tests.",
+					"Passing tests are not automatically trustworthy tests.",
+					"Generic happy paths leave important CFP rules uncovered."
+				],
 				"changed" : [ "tests/specs/unit/SessionDecisionServiceSpec.bx" ],
 				"command" : "box run-script test:target"
 			},
 			{
-				"id" : "02",
-				"title" : "Audit before running",
-				"description" : "Do not change code. Show the critique pass before execution.",
-				"promptFile" : ".ai/prompts/02-audit-before-running.md",
+				"id"           : "02",
+				"title"        : "Agent audit before execution",
+				"description"  : "Do not change code. Show the critique pass before execution.",
+				"promptFile"   : ".ai/prompts/02-audit-before-running.md",
 				"responseFile" : ".ai/responses/02-audit-before-running.md",
-				"action" : "firstSpec",
+				"action"       : "firstSpec",
+				"concepts"     : [
+					"Use the agent as a reviewer before running generated tests.",
+					"Look for missing boundaries, duplicate cases, and implementation-coupled assertions.",
+					"TestBox dry-run discovery gives an inventory before execution."
+				],
 				"changed" : [ "No code changes" ],
 				"command" : "box run-script test:dry"
 			},
 			{
-				"id" : "03",
-				"title" : "Improved BDD coverage",
-				"description" : "Restore the stronger BDD specs with boundaries, minimum count, and excluded reviews.",
-				"promptFile" : ".ai/prompts/03-fix-bad-test-smells.md",
+				"id"           : "03",
+				"title"        : "Improved BDD coverage",
+				"description"  : "Restore the stronger BDD specs with boundaries, minimum count, and excluded reviews.",
+				"promptFile"   : ".ai/prompts/03-fix-bad-test-smells.md",
 				"responseFile" : ".ai/responses/03-fix-bad-test-smells.md",
-				"action" : "restoreSpecs",
-				"changed" : [ "tests/specs/unit/SessionDecisionServiceSpec.bx", "tests/specs/unit/SessionSpec.bx" ],
+				"action"       : "restoreSpecs",
+				"concepts"     : [
+					"Write the BDD behavior map first: describe/it names define the contract before setup code.",
+					"ColdBox/TestBox skills steer the agent toward framework conventions.",
+					"Behavior names now encode thresholds, minimum review count, and excluded reviews."
+				],
+				"changed" : [
+					"tests/specs/unit/SessionDecisionServiceSpec.bx",
+					"tests/specs/unit/SessionSpec.bx"
+				],
 				"command" : "box run-script test:target"
 			},
 			{
-				"id" : "04",
-				"title" : "Dry-run discovery",
-				"description" : "Keep code steady and inspect discovered bundles, suites, and specs before execution.",
-				"promptFile" : ".ai/prompts/04-use-dry-run-discovery.md",
+				"id"           : "04",
+				"title"        : "TestBox 7 dry-run discovery",
+				"description"  : "Keep code steady and inspect discovered bundles, suites, and specs before execution.",
+				"promptFile"   : ".ai/prompts/04-use-dry-run-discovery.md",
 				"responseFile" : ".ai/responses/04-use-dry-run-discovery.md",
-				"action" : "restoreSpecs",
+				"action"       : "restoreSpecs",
+				"concepts"     : [
+					"TestBox 7 dry-run/discovery confirms suite names and spec counts without executing tests.",
+					"Discovery catches missing or duplicate generated cases before the feedback loop gets noisy.",
+					"Targeted commands keep the next execution narrow."
+				],
 				"changed" : [ "No code changes" ],
 				"command" : "box run-script test:dry"
 			},
 			{
-				"id" : "05",
-				"title" : "Intentional failing implementation",
-				"description" : "Apply the threshold bug so the equality boundary spec fails for the right reason.",
-				"promptFile" : ".ai/prompts/05-debug-failing-spec.md",
+				"id"           : "05",
+				"title"        : "Intentional failing implementation",
+				"description"  : "Apply the threshold bug so the equality boundary spec fails for the right reason.",
+				"promptFile"   : ".ai/prompts/05-debug-failing-spec.md",
 				"responseFile" : ".ai/responses/05-debug-failing-spec.md",
-				"action" : "bug",
+				"action"       : "bug",
+				"concepts"     : [
+					"Use the agent to diagnose whether the test or implementation is wrong.",
+					"The tests expose a real threshold bug instead of creating risk.",
+					"Keep valid failing tests; make the smallest implementation fix."
+				],
 				"changed" : [ "app/models/SessionDecisionService.bx (intentional failing threshold comparison)" ],
 				"command" : "box run-script test:target"
 			},
 			{
-				"id" : "06",
-				"title" : "Final green suite review",
-				"description" : "Restore known-good code and show the skeptical senior engineer review.",
-				"promptFile" : ".ai/prompts/06-improve-with-bdd-language.md",
-				"responseFile" : ".ai/responses/06-improve-with-bdd-language.md",
-				"action" : "final",
-				"changed" : [ "app/models/SessionDecisionService.bx", "tests/specs/unit/SessionDecisionServiceSpec.bx", "tests/specs/unit/SessionSpec.bx", "tests/specs/integration/SessionsSpec.bx" ],
+				"id"           : "06",
+				"title"        : "Final green suite review",
+				"description"  : "Restore known-good code and show the skeptical senior engineer review.",
+				"promptFile"   : ".ai/prompts/06-review-final-suite.md",
+				"responseFile" : ".ai/responses/06-review-final-suite.md",
+				"action"       : "final",
+				"concepts"     : [
+					"Final state combines fixed implementation, unit behavior specs, and one ColdBox integration spec.",
+					"Streaming/full-suite TestBox workflows show the final feedback rhythm.",
+					"Tests are a source of truth, not a source of risk."
+				],
+				"changed" : [
+					"app/models/SessionDecisionService.bx",
+					"tests/specs/unit/SessionDecisionServiceSpec.bx",
+					"tests/specs/unit/SessionSpec.bx",
+					"tests/specs/integration/SessionsSpec.bx"
+				],
 				"command" : "box testbox run outputFormats=mintext"
 			}
 		];

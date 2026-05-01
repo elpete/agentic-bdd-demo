@@ -24,10 +24,17 @@ Open these files before starting:
 - `app/models/SessionDecisionService.bx`
 - `.codex/guidelines.md`
 - `.codex/skills/write-testbox-bdd-spec.md`
+- `.ai/guidelines/core/coldbox.md`
+- `.ai/skills/core/testing-bdd/SKILL.md`
 - `.ai/prompts/`
 - `.ai/responses/`
 
-At state `00`, `tests/specs/unit/` should only contain `.gitkeep`.
+These files are the ColdBox AI context: local guidelines, reusable testing
+skills, and framework documentation that can be refreshed or supplemented by
+MCP servers when live docs are needed.
+
+At state `00`, `tests/specs/unit/` and `tests/specs/integration/` should only
+contain `.gitkeep`.
 
 ## Demo Controller
 
@@ -62,15 +69,15 @@ show files changed, wait once, and exit.
 
 | State | Purpose | Active code after state |
 | --- | --- | --- |
-| `00` | Baseline before AI tests | App code only; no active generated unit specs |
+| `00` | Baseline before AI tests | App code only; no active generated specs |
 | `01` | First generated spec | `SessionDecisionServiceSpec.bx` only, shallow first pass |
-| `02` | Audit before running | No file changes from `01` |
+| `02` | Agent audit before execution | No file changes from `01` |
 | `03` | Better BDD coverage | Final service spec plus `SessionSpec.bx` |
-| `04` | Dry-run discovery | No file changes from `03` |
+| `04` | TestBox 7 dry-run discovery | No file changes from `03` |
 | `05` | Intentional failure | Same specs as `03`, service has strict `>` bug |
-| `06` | Final green review | Fixed service plus final unit specs |
+| `06` | Final green review | Fixed service plus final unit and integration specs |
 
-The final green unit specs live in `tests/resources/demo-states/final/`.
+The final green unit and integration specs live in `tests/resources/demo-states/final/`.
 The first generated spec lives in `tests/resources/demo-states/01-first-spec/`.
 
 ## Step 0: Baseline Orientation
@@ -91,13 +98,18 @@ Expected active files:
 
 ```text
 tests/specs/unit/.gitkeep
+tests/specs/integration/.gitkeep
 ```
+
+There is no prompt/response pair for state `00`; this is the human setup beat
+before the first fake Codex prompt.
 
 Talk track:
 
 - The app has real CFP scoring behavior.
 - The service is intentionally under-tested at the start.
 - The point is not "AI writes tests"; the point is giving the agent a behavior map.
+- ColdBox AI context matters: guidelines teach conventions, skills teach workflow, and MCP/docs context keeps framework details from becoming guesswork.
 
 Do not run `box run-script test:target` yet. The target spec does not exist in
 state `00`.
@@ -189,6 +201,7 @@ The task shows:
 
 - `.ai/prompts/03-fix-bad-test-smells.md`
 - `.ai/responses/03-fix-bad-test-smells.md`
+- `.codex/skills/write-testbox-bdd-spec.md`
 
 Expected active files:
 
@@ -223,9 +236,11 @@ Expected:
 
 Talking points:
 
+- Write the BDD spec names first. The agent should see the behavior contract before it fills in setup and assertions.
 - BDD names now encode business rules.
 - Boundary values are explicit.
 - The tests describe what must be excluded from final decisions.
+- The ColdBox/TestBox guidance keeps the generated code inside framework conventions.
 
 ## Step 4: Dry-Run Discovery
 
@@ -289,11 +304,17 @@ Command:
 box run-script test:target
 ```
 
-Expected failure:
+Expected failures:
 
 ```text
 accepts a submitted session when the average equals the acceptance threshold
-expected accepted but received waitlisted or rejected
+Expected [accepted] but received [waitlisted]
+
+waitlists a submitted session when the average equals the waitlist threshold
+Expected [waitlisted] but received [rejected]
+
+ignores incomplete and conflicted reviews when calculating the final decision
+Expected [accepted] but received [waitlisted]
 ```
 
 Talking points:
@@ -343,8 +364,8 @@ Expected final state:
 
 Show:
 
-- `.ai/prompts/06-improve-with-bdd-language.md`
-- `.ai/responses/06-improve-with-bdd-language.md`
+- `.ai/prompts/06-review-final-suite.md`
+- `.ai/responses/06-review-final-suite.md`
 - `tests/specs/integration/SessionsSpec.bx`
 
 Close with:

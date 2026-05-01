@@ -16,6 +16,8 @@ The earlier version had useful happy paths but weak boundaries. I changed the ex
 - fewer than three eligible reviews is not final
 - incomplete and conflicted reviews do not affect the decision
 
+I started with the BDD behavior map before filling in setup code. That made the agent-facing contract explicit first: the spec names describe CFP decisions, then the Given / When / Then blocks prove those decisions with data.
+
 I also avoided private helper assertions. The tests still check `eligibleReviewCount` because that is part of the decision result and helps prove excluded reviews stayed excluded.
 
 # Commands To Run
@@ -30,10 +32,17 @@ box run-script test:unit
 
 ```text
 SessionDecisionService
+  keeps a draft session out of final decision making
   accepts a submitted session when the average equals the acceptance threshold
   waitlists a submitted session when the average equals the waitlist threshold
+  rejects a submitted session below the waitlist threshold
   waitlists an otherwise strong session until it has enough eligible reviews
   ignores incomplete and conflicted reviews when calculating the final decision
+
+Session
+  starts in draft
+  requires title, abstract, speaker, and category before submission
+  averages only completed non-conflicting reviews
 ```
 
 # Risks / Things To Manually Review

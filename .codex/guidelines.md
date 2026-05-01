@@ -8,6 +8,7 @@ Use these rules when generating or editing code in this repo.
 - Avoid reserved scope names such as `session`, `application`, `request`, `url`, `form`, `variables`, and `arguments` for local variables or function arguments.
 - Prefer public behavior over private implementation details.
 - TestBox specs should use `describe`, `it`, and `expect`.
+- Write the BDD behavior map before the implementation details: suite/spec names first, setup/assertions second.
 - Use clear Given / When / Then comments when they make behavior easier to scan.
 - Do not over-mock domain objects; build real `Session`, `Speaker`, `Review`, and `ScoreCard` instances unless a collaborator boundary is explicit.
 - Use targeted TestBox runs while iterating:

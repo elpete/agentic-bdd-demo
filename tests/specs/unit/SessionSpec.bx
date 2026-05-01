@@ -1,0 +1,60 @@
+class extends="testbox.system.BaseSpec" {
+
+	function run(){
+		describe( "Session", () => {
+			it( "starts in draft", () => {
+				expect( new app.models.Session().isDraft() ).toBeTrue();
+			} );
+
+			it( "requires title, abstract, speaker, and category before submission", () => {
+				var proposal = new app.models.Session(
+					title = "BDD Keeps Agents Honest",
+					abstract = "A useful abstract.",
+					speaker = new app.models.Speaker( name = "Avery", email = "avery@example.test" ),
+					category = "Testing"
+				);
+
+				expect( proposal.canSubmit() ).toBeTrue();
+				expect( () => new app.models.Session().submit() ).toThrow( "Session.InvalidSubmission" );
+			} );
+
+			it( "averages only completed non-conflicting reviews", () => {
+				var proposal = new app.models.Session(
+					title = "BDD Keeps Agents Honest",
+					abstract = "A useful abstract.",
+					speaker = new app.models.Speaker( name = "Avery", email = "avery@example.test" ),
+					category = "Testing"
+				).submit();
+
+				proposal
+					.addReview( review( "alex", true, false, 4 ) )
+					.addReview( review( "blair", true, false, 5 ) )
+					.addReview( review( "casey", false, false, 1 ) )
+					.addReview( review( "devon", true, true, 1 ) );
+
+				expect( proposal.averageScore() ).toBe( 4.5 );
+				expect( arrayLen( proposal.decisionEligibleReviews() ) ).toBe( 2 );
+			} );
+		} );
+	}
+
+	private any function review(
+		required string reviewer,
+		required boolean submitted,
+		required boolean conflict,
+		required numeric score
+	){
+		return new app.models.Review(
+			reviewer = arguments.reviewer,
+			submitted = arguments.submitted,
+			conflict = arguments.conflict,
+			scoreCard = new app.models.ScoreCard(
+				clarity = arguments.score,
+				relevance = arguments.score,
+				originality = arguments.score,
+				confidence = arguments.score
+			)
+		);
+	}
+
+}
