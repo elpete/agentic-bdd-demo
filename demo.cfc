@@ -54,16 +54,7 @@ component {
 	}
 
 	function list(){
-		var current = getCurrentState();
-
-		print.boldLine( "Agentic BDD Demo States" );
-		for ( var state in getStates() ) {
-			var marker = state.id == current ? "=>" : "  ";
-			print.line( "#marker# #state.id#  #state.title#" );
-		}
-
-		print.line();
-		print.line( "Current state: #current#" );
+		printStateList();
 	}
 
 	function show( string state = "" ){
@@ -145,9 +136,27 @@ component {
 
 		print.line();
 		print.boldLine( "Agentic BDD Demo Console" );
-		print.line( "Current: #current.id#  #current.title#" );
+		printStateList( false );
 		print.line( "Next command: #current.command#" );
 		print.line();
+	}
+
+	private function printStateList( boolean includeTitle = true ){
+		var current = getCurrentState();
+
+		if ( arguments.includeTitle ) {
+			print.boldLine( "Agentic BDD Demo States" );
+		} else {
+			print.boldLine( "Available States" );
+		}
+
+		for ( var state in getStates() ) {
+			var marker = state.id == current ? "=>" : "  ";
+			print.line( "#marker# #state.id#  #state.title#" );
+		}
+
+		print.line();
+		print.line( "Current state: #current#" );
 	}
 
 	private string function chooseMenuAction(){
